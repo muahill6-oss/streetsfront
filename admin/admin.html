@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street Chefs — Admin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍢</text></svg>">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { sc: { orange:'#EC6426', yellow:'#F8A91F', cream:'#FDE3CF', brown:'#632713', dark:'#4a1d0e' } },
+  fontFamily: { word:['Bungee','cursive'], display:['"Baloo 2"','cursive'], body:['Inter','sans-serif'] }
+}}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Baloo+2:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family:'Inter',sans-serif; background:#FDE3CF; -webkit-tap-highlight-color:transparent; }
+  .disp { font-family:'Baloo 2',cursive; } .word { font-family:'Bungee',cursive; letter-spacing:.01em; }
+  [data-lucide] { stroke-width:2; }
+  .tab-btn { transition:all .2s; } .tab-btn.active { background:#632713; color:#F8A91F; }
+  .fade-in { animation:fadeIn .3s ease-out; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  .skeleton { background:linear-gradient(90deg,#f1e7d8 25%,#faf3e8 50%,#f1e7d8 75%); background-size:200% 100%; animation:shimmer 1.2s infinite; border-radius:.6rem; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .modal-bg { opacity:0; pointer-events:none; transition:opacity .3s; } .modal-bg.open { opacity:1; pointer-events:auto; }
+  .modal-card { opacity:0; transform:translate(-50%,-50%) scale(.94); pointer-events:none; transition:opacity .3s, transform .3s cubic-bezier(.16,1,.3,1); }
+  .modal-card.open { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+  #toast-wrap { pointer-events:none; }
+  .toast { animation:toastIn .35s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes toastIn { from { opacity:0; transform:translateY(12px) scale(.95); } to { opacity:1; transform:none; } }
+  .bar-fill { transition:width .8s cubic-bezier(.16,1,.3,1); }
+  ::-webkit-scrollbar { width:6px; height:6px; } ::-webkit-scrollbar-thumb { background:#63271333; border-radius:99px; }
+</style>
+</head>
+<body class="text-stone-800 min-h-screen">
+
+<div id="toast-wrap" class="fixed top-20 right-4 z-[120] space-y-2 w-[min(90vw,320px)]"></div>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-2xl bg-sc-brown text-sc-yellow flex items-center justify-center mx-auto mb-4"><i data-lucide="flame" class="w-8 h-8"></i></div>
+      <h1 class="word text-2xl text-sc-brown">Street Chiefs</h1>
+      <p class="text-[10px] uppercase tracking-[0.3em] text-sc-orange mt-2">Staff Access Only</p>
+    </div>
+    <div class="bg-white rounded-3xl border border-[#EC6426]/20 shadow-sm p-7">
+      <p id="login-error" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-xl mb-4"></p>
+      <form id="login-form" class="space-y-3">
+        <input id="login-email" type="email" required placeholder="Email" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+        <input id="login-pass" type="password" required placeholder="Password" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+        <button type="submit" id="login-btn" class="w-full bg-sc-orange text-white py-3 rounded-xl font-semibold hover:bg-[#d4551d] transition">Sign In</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN APP ===== -->
+<div id="admin-app" class="hidden">
+  <header class="sticky top-0 z-40 bg-[#632713] text-sc-cream shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <span class="w-9 h-9 rounded-xl bg-sc-yellow text-sc-brown flex items-center justify-center flex-shrink-0"><i data-lucide="flame" class="w-5 h-5"></i></span>
+      <div class="min-w-0">
+        <p class="word text-sc-yellow leading-none text-sm sm:text-base">Street Chefs</p>
+        <p class="text-[10px] uppercase tracking-[0.25em] text-sc-cream/60 mt-0.5">Kampala Admin</p>
+      </div>
+      <div class="flex-1"></div>
+      <span id="admin-role" class="text-[10px] font-bold bg-sc-yellow/20 text-sc-yellow rounded-full px-2.5 py-1 uppercase tracking-wide"></span>
+      <span id="clock" class="text-sm font-semibold tabular-nums text-sc-cream/80">--:--</span>
+      <button id="global-refresh" class="text-sc-cream/70 hover:text-white p-2 rounded-xl hover:bg-white/10 transition" title="Refresh all data"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+      <button id="admin-logout" class="text-sc-cream/70 hover:text-white p-2 rounded-xl hover:bg-white/10 transition" title="Logout"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+    </div>
+    <nav class="max-w-6xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto">
+      <button data-tab="today" class="tab-btn active whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Today</button>
+      <button data-tab="dispatch" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Dispatch</button>
+      <button data-tab="history" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">History</button>
+      <button data-tab="analytics" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Analytics</button>
+      <button data-tab="menu" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Menu</button>
+      <button data-tab="reviews" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Reviews</button>
+      <button data-tab="customers" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Customers</button>
+      <button data-tab="staff" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Staff</button>
+      <button data-tab="settings" class="tab-btn whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl bg-white/10 text-sc-cream/80 hover:bg-white/20">Settings</button>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+
+    <!-- TODAY -->
+    <section id="tab-today" class="fade-in"></section>
+
+    <!-- DISPATCH -->
+    <section id="tab-dispatch" class="hidden fade-in">
+      <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between mb-4">
+        <h2 class="disp text-xl font-extrabold text-sc-brown">Open Orders</h2>
+        <div class="relative w-full sm:w-72">
+          <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"></i>
+          <input id="dispatch-search" type="text" placeholder="Search code, name, phone…" class="w-full bg-white border border-[#EC6426]/25 rounded-xl text-sm py-2.5 pl-9 pr-3 outline-none focus:border-sc-orange">
+        </div>
+      </div>
+      <div id="dispatch-chips" class="flex gap-2 flex-wrap mb-5"></div>
+      <div id="dispatch-list" class="space-y-4"></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="tab-history" class="hidden fade-in">
+      <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between mb-4">
+        <h2 class="disp text-xl font-extrabold text-sc-brown">Order History</h2>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <div class="relative flex-1 sm:w-56">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"></i>
+            <input id="history-search" placeholder="Search…" class="w-full bg-white border border-[#EC6426]/25 rounded-xl text-sm py-2.5 pl-9 pr-3 outline-none focus:border-sc-orange">
+          </div>
+          <select id="history-range" class="bg-white border border-[#EC6426]/25 rounded-xl text-sm px-3 py-2.5 outline-none">
+            <option value="all">All time</option>
+            <option value="daily">Today</option>
+            <option value="weekly">Last 7 days</option>
+            <option value="monthly">Last 30 days</option>
+          </select>
+        </div>
+      </div>
+      <div id="history-summary" class="mb-4"></div>
+      <div id="history-list" class="space-y-4"></div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="tab-analytics" class="hidden fade-in">
+      <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between mb-5">
+        <h2 class="disp text-xl font-extrabold text-sc-brown">Best Sellers</h2>
+        <div id="analytics-chips" class="flex gap-2 flex-wrap"></div>
+      </div>
+      <div id="analytics-summary" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
+      <div class="bg-white rounded-2xl border border-[#EC6426]/15 p-5 sm:p-6">
+        <h3 class="disp font-bold text-sc-brown mb-1">Top Selling Items</h3>
+        <p id="analytics-range-label" class="text-xs text-stone-400 mb-5"></p>
+        <div id="analytics-bars" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="tab-menu" class="hidden fade-in">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <h2 class="disp text-xl font-extrabold text-sc-brown">Menu Manager</h2>
+        <div class="flex gap-2">
+          <button id="add-cat-btn" class="bg-white border border-[#EC6426]/30 text-sc-brown text-sm font-semibold px-4 py-2 rounded-xl hover:border-sc-orange transition flex items-center gap-1.5"><i data-lucide="folder-plus" class="w-4 h-4"></i>Category</button>
+          <button id="add-item-btn" class="bg-sc-orange text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#d4551d] transition flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i>Item</button>
+        </div>
+      </div>
+      <div id="menu-manager" class="space-y-8"></div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section id="tab-reviews" class="hidden fade-in">
+      <h2 class="disp text-xl font-extrabold text-sc-brown mb-6">Review Moderation</h2>
+      <div id="reviews-admin" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- CUSTOMERS -->
+    <section id="tab-customers" class="hidden fade-in">
+      <h2 class="disp text-xl font-extrabold text-sc-brown mb-6">Customers</h2>
+      <div class="bg-white rounded-2xl border border-[#EC6426]/15 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-sc-cream text-left text-[10px] uppercase tracking-widest text-stone-500">
+              <tr><th class="px-5 py-3">Name</th><th class="px-5 py-3">Email</th><th class="px-5 py-3">Phone</th><th class="px-5 py-3">Points</th><th class="px-5 py-3">Actions</th></tr>
+            </thead>
+            <tbody id="customers-list" class="divide-y divide-stone-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAFF -->
+    <section id="tab-staff" class="hidden fade-in">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="disp text-xl font-extrabold text-sc-brown">Staff Access</h2>
+          <p class="text-sm text-stone-500 mt-1">Who can log into this dashboard.</p>
+        </div>
+        <button id="add-staff-btn" class="hidden bg-sc-orange text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#d4551d] transition items-center gap-1.5"><i data-lucide="user-plus" class="w-4 h-4"></i>Add Staff</button>
+      </div>
+      <p id="staff-note" class="hidden text-xs text-stone-500 bg-sc-cream/60 rounded-xl px-4 py-3 mb-4">You have staff access. Only owners can add or remove dashboard users.</p>
+      <div id="staff-list" class="space-y-3"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="hidden fade-in max-w-xl">
+      <h2 class="disp text-xl font-extrabold text-sc-brown mb-6">Settings</h2>
+
+      <div class="bg-white rounded-2xl border border-[#EC6426]/15 p-6 space-y-4 mb-6">
+        <h3 class="disp font-bold text-sc-brown">Site Text</h3>
+        <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Hero Tagline</label><input id="st-hero" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+        <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Announcement Bar</label><input id="st-announcement" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Hours (Weekday)</label><input id="st-hours-weekday" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+          <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Hours (Sunday)</label><input id="st-hours-sunday" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+        </div>
+        <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Address</label><input id="st-address" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+        <button id="save-sitetext" class="w-full bg-sc-brown text-sc-yellow py-3 rounded-xl font-semibold hover:bg-sc-dark transition">Save Text</button>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-[#EC6426]/15 p-6 space-y-4 mb-6">
+        <h3 class="disp font-bold text-sc-brown">Rewards & Discount Codes</h3>
+        <div id="rw-liability" class="hidden bg-sc-cream/60 rounded-xl p-4"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Earn Rate (pts / 1,000 UGX)</label><input id="rw-earn" type="number" min="0" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+          <div><label class="block text-xs font-semibold text-stone-500 mb-1.5 uppercase tracking-wide">Point Value (UGX / pt)</label><input id="rw-redeem" type="number" min="0" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></div>
+        </div>
+        <button id="save-rewards" class="w-full bg-sc-brown text-sc-yellow py-3 rounded-xl font-semibold hover:bg-sc-dark transition">Save Rewards</button>
+        <div class="pt-2 border-t border-stone-100">
+          <p class="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3">Discount Codes</p>
+          <div class="flex gap-2 mb-4">
+            <input id="dc-code" placeholder="CODE" class="flex-1 bg-sc-cream rounded-xl px-4 py-3 text-sm uppercase outline-none focus:ring-2 focus:ring-sc-orange">
+            <select id="dc-type" class="bg-sc-cream rounded-xl px-3 py-3 text-sm outline-none"><option value="percent">%</option><option value="fixed">UGX</option></select>
+            <input id="dc-value" type="number" min="1" placeholder="Value" class="w-24 bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+            <button id="dc-add" class="bg-sc-orange text-white px-4 rounded-xl font-semibold hover:bg-[#d4551d] transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+          </div>
+          <div id="codes-list" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-[#EC6426]/15 p-6 space-y-4">
+        <h3 class="disp font-bold text-sc-brown">Delivery Location</h3>
+        <p class="text-sm text-stone-500">Paste GPS coordinates (lat, lng) or a Google Maps link.</p>
+        <textarea id="loc-input" rows="3" placeholder="e.g. 0.3476, 32.5825 or https://maps.google.com/…" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></textarea>
+        <div class="flex gap-2">
+          <button id="loc-open" class="flex-1 bg-white border border-[#EC6426]/30 text-sc-brown py-3 rounded-xl font-semibold hover:border-sc-orange transition">Open</button>
+          <button id="loc-save" class="flex-1 bg-sc-brown text-sc-yellow py-3 rounded-xl font-semibold hover:bg-sc-dark transition">Save Location</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== STAFF MODAL ===== -->
+<div id="staff-bg" class="modal-bg fixed inset-0 z-50 bg-sc-brown/50 backdrop-blur-sm"></div>
+<div id="staff-modal" class="modal-card fixed z-[60] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="disp text-xl font-extrabold text-sc-brown">Add Staff Member</h3>
+    <button id="staff-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+  </div>
+  <p id="staff-error" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-xl mb-3"></p>
+  <form id="staff-form" class="space-y-3">
+    <input id="staff-email" type="email" required placeholder="Email address" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+    <select id="staff-role" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none"><option value="staff">Staff</option><option value="owner">Owner</option></select>
+    <button type="submit" class="w-full bg-sc-orange text-white py-3 rounded-xl font-semibold hover:bg-[#d4551d] transition">Add Staff Member</button>
+  </form>
+</div>
+
+<!-- ===== ITEM MODAL ===== -->
+<div id="item-bg" class="modal-bg fixed inset-0 z-50 bg-sc-brown/50 backdrop-blur-sm"></div>
+<div id="item-modal" class="modal-card fixed z-[60] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-6 max-h-[88vh] overflow-y-auto">
+  <div class="flex items-center justify-between mb-4">
+    <h3 id="item-modal-title" class="disp text-xl font-extrabold text-sc-brown">New Item</h3>
+    <button id="item-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+  </div>
+  <form id="item-form" class="space-y-3">
+    <input type="hidden" id="it-id">
+    <input id="it-name" required placeholder="Dish name" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+    <select id="it-cat" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></select>
+    <input id="it-price" type="number" required min="0" placeholder="Price (UGX)" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+    <select id="it-badge" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none"><option value="">No badge</option><option value="best">★ Best Seller</option><option value="chef">Chef's Special</option></select>
+    <input id="it-tags" placeholder="Tags: spicy, vegan (comma separated)" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+    <input id="it-note" placeholder="Chef's note / description" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+    <button type="submit" class="w-full bg-sc-orange text-white py-3 rounded-xl font-semibold hover:bg-[#d4551d] transition">Save Item</button>
+  </form>
+</div>
+
+<!-- ===== CATEGORY MODAL ===== -->
+<div id="cat-bg" class="modal-bg fixed inset-0 z-50 bg-sc-brown/50 backdrop-blur-sm"></div>
+<div id="cat-modal" class="modal-card fixed z-[60] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-6">
+  <h3 class="disp text-xl font-extrabold text-sc-brown mb-4">New Category</h3>
+  <form id="cat-form" class="space-y-3">
+    <input id="cat-name" required placeholder="Category name" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
+    <button type="submit" class="w-full bg-sc-orange text-white py-3 rounded-xl font-semibold hover:bg-[#d4551d] transition">Add Category</button>
+  </form>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://jvcxgnypznyhkbcshxes.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2Y3hnbnlwem55aGtiY3NoeGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NDg4MzUsImV4cCI6MjEwMjEyNDgzNX0.ki8oAuaDYyEx8UpVWzXGDdruYOIfRLqP9SAqUlhVq9w';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const WHATSAPP = '256764256966';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => 'UGX ' + Number(n || 0).toLocaleString();
+const waPhone = p => { let d = (p || '').replace(/\D/g, ''); if (!d) return ''; if (d.startsWith('0')) d = '256' + d.slice(1); else if (!d.startsWith('256')) d = '256' + d; return d; };
+
+/* ---------- STATE ---------- */
+let ALL_ORDERS = [], CATS = [], ITEMS = [], currentStaff = null, currentTab = 'today';
+let dispatchFilter = 'all', dispatchQuery = '', historyRange = 'all', historyQuery = '', analyticsPeriod = 'daily';
+const ACTIVE = ['pending','confirmed','preparing','out_for_delivery'];
+const STATUS_META = {
+  pending:          { label:'New',        color:'bg-blue-100 text-blue-800',     next:'confirmed',        btn:'Confirm' },
+  confirmed:        { label:'Confirmed',  color:'bg-indigo-100 text-indigo-800', next:'preparing',        btn:'Start Cooking' },
+  preparing:        { label:'Cooking',    color:'bg-yellow-100 text-yellow-800', next:'out_for_delivery', btn:'Send Out' },
+  out_for_delivery: { label:'On the way', color:'bg-purple-100 text-purple-800', next:'completed',        btn:'Complete' },
+  completed:        { label:'Delivered',  color:'bg-green-100 text-green-800',   next:null,               btn:null }
+};
+const STATUS_MSG = {
+  confirmed:'✅ Your order has been confirmed and is being prepared!',
+  preparing:'🔥 Your food is now cooking.',
+  out_for_delivery:'🛵 Your order is on the way!',
+  completed:'🙏 Your order has been delivered. Thank you for choosing Street Chefs!'
+};
+const PERIOD_LABEL = { daily:'Today', weekly:'Last 7 days', monthly:'Last 30 days', yearly:'Last 365 days' };
+
+/* ---------- DATE HELPERS ---------- */
+function todayStart() { const d = new Date(); d.setHours(0,0,0,0); return d; }
+function periodStart(p) {
+  const now = new Date();
+  if (p === 'daily') return todayStart();
+  if (p === 'weekly') return new Date(now.getTime() - 7*86400000);
+  if (p === 'monthly') return new Date(now.getTime() - 30*86400000);
+  if (p === 'yearly') return new Date(now.getTime() - 365*86400000);
+  return todayStart();
+}
+
+/* ---------- UI HELPERS ---------- */
+function showToast(msg, type = 'success') {
+  const wrap = $('toast-wrap'); const t = document.createElement('div');
+  const color = type === 'success' ? 'bg-sc-brown' : type === 'error' ? 'bg-red-600' : 'bg-stone-700';
+  t.className = 'toast ' + color + ' text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2';
+  t.innerHTML = '<i data-lucide="' + (type==='success'?'check-circle':type==='error'?'alert-circle':'info') + '" class="w-4 h-4 flex-shrink-0"></i><span>' + esc(msg) + '</span>';
+  wrap.appendChild(t); lucide.createIcons();
+  setTimeout(() => { t.style.transition='all .3s'; t.style.opacity='0'; t.style.transform='translateY(-8px)'; setTimeout(()=>t.remove(),300); }, 2600);
+}
+function openModal(bg, id) { $(bg).classList.add('open'); $(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(bg, id) { $(bg).classList.remove('open'); $(id).classList.remove('open'); document.body.style.overflow=''; }
+function statCard(label, value, colorClass) {
+  return '<div class="bg-white rounded-2xl border border-[#EC6426]/15 p-5"><p class="text-[10px] uppercase tracking-widest text-stone-400">' + label + '</p><p class="disp text-2xl font-extrabold mt-1 ' + (colorClass||'text-sc-brown') + '">' + value + '</p></div>';
+}
+
+/* ---------- SECURE LOGIN ---------- */
+async function verifyStaff(email) {
+  const { data } = await db.from('staff_members').select('role').eq('email', email.toLowerCase()).maybeSingle();
+  return data || null;
+}
+$('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('login-btn'); btn.disabled = true; btn.textContent = 'Verifying…';
+  $('login-error').classList.add('hidden');
+  const email = $('login-email').value.trim(), pass = $('login-pass').value;
+  const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+  if (error) { $('login-error').textContent = error.message; $('login-error').classList.remove('hidden'); btn.disabled = false; btn.textContent = 'Sign In'; return; }
+  const staff = await verifyStaff(data.user.email);
+  if (!staff) { await db.auth.signOut(); $('login-error').textContent = 'This account is not authorized for admin access.'; $('login-error').classList.remove('hidden'); btn.disabled = false; btn.textContent = 'Sign In'; return; }
+  currentStaff = { email: data.user.email.toLowerCase(), role: staff.role };
+  btn.disabled = false; btn.textContent = 'Sign In';
+  showAdmin();
+});
+$('admin-logout').addEventListener('click', async () => { await db.auth.signOut(); currentStaff = null; location.reload(); });
+
+async function showAdmin() {
+  $('login-screen').classList.add('hidden');
+  $('admin-app').classList.remove('hidden');
+  $('admin-role').textContent = currentStaff.role;
+  const isOwner = currentStaff.role === 'owner';
+  $('add-staff-btn').classList.toggle('hidden', !isOwner);
+  $('add-staff-btn').classList.toggle('flex', isOwner);
+  $('staff-note').classList.toggle('hidden', isOwner);
+  lucide.createIcons();
+  await loadAllOrders();
+  loadMenuManager(); loadReviews(); loadCustomers(); loadStaff(); loadSiteText(); loadRewards(); loadCodes(); loadLocation();
+  switchTab('today');
+}
+
+(async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (session) {
+    const staff = await verifyStaff(session.user.email);
+    if (staff) { currentStaff = { email: session.user.email.toLowerCase(), role: staff.role }; showAdmin(); }
+    else await db.auth.signOut();
+  }
+  lucide.createIcons();
+})();
+
+/* ---------- CENTRAL ORDER LOAD ---------- */
+async function loadAllOrders() {
+  const { data: orders } = await db.from('orders').select('*').order('created_at', { ascending:false }).limit(1000);
+  ALL_ORDERS = orders || [];
+  const ids = ALL_ORDERS.map(o => o.id);
+  let items = [];
+  if (ids.length) { const r = await db.from('order_items').select('*').in('order_id', ids); items = r.data || []; }
+  ALL_ORDERS.forEach(o => o.items = items.filter(i => i.order_id === o.id).map(i => ({ name:i.item_name_snapshot, price:i.item_price_snapshot, quantity:i.quantity, subtotal:i.subtotal })));
+}
+async function refreshData() { await loadAllOrders(); renderCurrentOrders(); showToast('Data refreshed', 'info'); }
+$('global-refresh').addEventListener('click', refreshData);
+
+/* ---------- TAB SWITCHING ---------- */
+document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+function switchTab(name) {
+  currentTab = name;
+  document.querySelectorAll('[data-tab]').forEach(x => x.classList.remove('active'));
+  document.querySelector('[data-tab="'+name+'"]').classList.add('active');
+  ['today','dispatch','history','analytics','menu','reviews','customers','staff','settings'].forEach(t => $('tab-'+t).classList.add('hidden'));
+  $('tab-'+name).classList.remove('hidden');
+  renderCurrentOrders();
+}
+function renderCurrentOrders() {
+  if (currentTab === 'today') renderToday();
+  else if (currentTab === 'dispatch') { renderDispatchChips(); renderDispatchList(); }
+  else if (currentTab === 'history') renderHistory();
+  else if (currentTab === 'analytics') renderAnalytics();
+}
+
+/* ---------- SHARED ORDER CARD ---------- */
+function orderCard(o) {
+  const m = STATUS_META[o.status] || STATUS_META.pending;
+  const phone = waPhone(o.customer_phone);
+  const carried = new Date(o.created_at) < todayStart() && ACTIVE.includes(o.status);
+  let h = '<div class="bg-white rounded-2xl border border-[#EC6426]/15 p-5 fade-in">';
+  h += '<div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="flex items-center gap-2 flex-wrap">';
+  h += '<span class="word text-sm text-sc-orange">#' + esc(o.order_code) + '</span>';
+  h += '<span class="text-[10px] px-2.5 py-1 rounded-full font-bold ' + m.color + '">' + m.label + '</span>';
+  if (carried) h += '<span class="text-[10px] px-2.5 py-1 rounded-full font-bold bg-amber-100 text-amber-800">From earlier</span>';
+  h += '<span class="text-xs text-stone-400">' + new Date(o.created_at).toLocaleString('en-UG',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</span>';
+  h += '</div><span class="disp font-extrabold text-sc-brown">' + fmt(o.total_amount) + '</span></div>';
+  h += '<p class="text-sm font-semibold text-sc-brown">' + esc(o.customer_name) + ' · ' + esc(o.customer_phone || 'no phone') + '</p>';
+  if (o.delivery_address) h += '<p class="text-xs text-stone-500 mt-0.5">📍 ' + esc(o.delivery_address) + '</p>';
+  if (o.notes) h += '<p class="text-xs italic text-stone-500 mt-0.5">"' + esc(o.notes) + '"</p>';
+  if (o.discount_code) h += '<p class="text-xs text-green-700 mt-0.5">Discount: ' + esc(o.discount_code) + ' (−' + fmt(o.discount_amount) + ')</p>';
+  if (o.points_redeemed) h += '<p class="text-xs text-sc-orange mt-0.5">🎁 ' + o.points_redeemed + ' pts redeemed</p>';
+  h += '<div class="mt-3 space-y-1 border-t border-stone-100 pt-3">' + o.items.map(i => '<div class="flex justify-between text-sm"><span class="text-stone-600">' + i.quantity + '× ' + esc(i.name) + '</span><span class="font-semibold text-sc-brown">' + fmt(i.subtotal) + '</span></div>').join('') + '</div>';
+  h += '<div class="flex flex-wrap gap-2 mt-4">';
+  if (phone) h += '<a href="https://wa.me/' + phone + '?text=' + encodeURIComponent('Hello ' + o.customer_name + '! This is Street Chefs 🍢 regarding your order #' + o.order_code + '.') + '" target="_blank" class="text-xs font-semibold bg-green-50 text-green-700 px-3 py-2 rounded-xl hover:bg-green-100 transition flex items-center gap-1.5"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i>WhatsApp</a>';
+  if (m.next) h += '<button onclick="advanceOrder(\'' + o.id + '\')" class="text-xs font-semibold bg-sc-orange text-white px-4 py-2 rounded-xl hover:bg-[#d4551d] transition">' + m.btn + ' →</button>';
+  else h += '<span class="text-xs font-semibold text-green-600 flex items-center gap-1"><i data-lucide="check-circle" class="w-4 h-4"></i>Done</span>';
+  h += '</div></div>';
+  return h;
+}
+
+/* ---------- TODAY TAB ---------- */
+function renderToday() {
+  const ts = todayStart();
+  const todays = ALL_ORDERS.filter(o => new Date(o.created_at) >= ts);
+  const completedToday = todays.filter(o => o.status === 'completed');
+  const revenue = completedToday.reduce((s,o)=>s+(o.total_amount||0),0);
+  const active = ALL_ORDERS.filter(o => ACTIVE.includes(o.status));
+  const carried = active.filter(o => new Date(o.created_at) < ts);
+  const aov = completedToday.length ? Math.round(revenue/completedToday.length) : 0;
+  let h = '<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">';
+  h += statCard("Today's Revenue", fmt(revenue));
+  h += statCard('Orders Today', todays.length);
+  h += statCard('Active Orders', active.length, 'text-sc-orange');
+  h += statCard('Avg Order', fmt(aov));
+  h += '</div>';
+  if (carried.length) {
+    h += '<div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6"><p class="text-sm font-bold text-amber-800 mb-1 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4"></i>Carried over from earlier — still open</p><p class="text-xs text-amber-700 mb-3">These are from a previous day and still need to be completed. They stay here until you finish them, so nothing gets lost between days.</p><div class="space-y-3">' + carried.map(orderCard).join('') + '</div></div>';
+  }
+  h += '<h2 class="disp text-xl font-extrabold text-sc-brown mb-4">Today\'s Orders</h2>';
+  h += todays.length ? '<div class="space-y-4">' + todays.map(orderCard).join('') + '</div>' : '<p class="text-center text-stone-400 py-8">No orders yet today. They\'ll appear here as they come in.</p>';
+  $('tab-today').innerHTML = h;
+  lucide.createIcons();
+}
+
+/* ---------- DISPATCH TAB ---------- */
+function renderDispatchChips() {
+  const counts = { all:0, pending:0, confirmed:0, preparing:0, out_for_delivery:0 };
+  ALL_ORDERS.forEach(o => { if (ACTIVE.includes(o.status)) { counts.all++; counts[o.status]++; } });
+  const defs = [['all','All'],['pending','New'],['confirmed','Confirmed'],['preparing','Cooking'],['out_for_delivery','On the way']];
+  $('dispatch-chips').innerHTML = defs.map(([key,label]) =>
+    '<button onclick="setDispatchFilter(\'' + key + '\')" class="text-xs font-semibold px-3.5 py-2 rounded-full transition ' + (dispatchFilter===key ? 'bg-sc-brown text-sc-yellow' : 'bg-white text-sc-brown border border-[#EC6426]/25 hover:border-sc-orange') + '">' + label + ' (' + counts[key] + ')</button>'
+  ).join('');
+}
+function renderDispatchList() {
+  let open = ALL_ORDERS.filter(o => ACTIVE.includes(o.status));
+  if (dispatchFilter !== 'all') open = open.filter(o => o.status === dispatchFilter);
+  if (dispatchQuery) {
+    const q = dispatchQuery.toLowerCase();
+    open = open.filter(o => (o.order_code||'').toLowerCase().includes(q) || (o.customer_name||'').toLowerCase().includes(q) || (o.customer_phone||'').includes(q));
+  }
+  $('dispatch-list').innerHTML = open.length ? open.map(orderCard).join('') : '<p class="text-center text-stone-400 py-8">No open orders in this view. 🎉</p>';
+  lucide.createIcons();
+}
+window.setDispatchFilter = f => { dispatchFilter = f; renderDispatchChips(); renderDispatchList(); };
+$('dispatch-search').addEventListener('input', e => { dispatchQuery = e.target.value; renderDispatchList(); });
+
+/* ---------- HISTORY TAB ---------- */
+function renderHistory() {
+  let done = ALL_ORDERS.filter(o => o.status === 'completed');
+  const start = historyRange === 'all' ? null : periodStart(historyRange);
+  if (start) done = done.filter(o => new Date(o.created_at) >= start);
+  if (historyQuery) {
+    const q = historyQuery.toLowerCase();
+    done = done.filter(o => (o.order_code||'').toLowerCase().includes(q) || (o.customer_name||'').toLowerCase().includes(q) || (o.customer_phone||'').includes(q));
+  }
+  const rev = done.reduce((s,o)=>s+(o.total_amount||0),0);
+  $('history-summary').innerHTML = '<div class="bg-white rounded-2xl border border-[#EC6426]/15 p-4 flex flex-wrap gap-x-10 gap-y-2"><div><p class="text-[10px] uppercase tracking-widest text-stone-400">Completed Orders</p><p class="disp text-xl font-extrabold text-sc-brown">' + done.length + '</p></div><div><p class="text-[10px] uppercase tracking-widest text-stone-400">Revenue</p><p class="disp text-xl font-extrabold text-sc-brown">' + fmt(rev) + '</p></div></div>';
+  $('history-list').innerHTML = done.length ? done.map(orderCard).join('') : '<p class="text-center text-stone-400 py-8">No completed orders in this range yet.</p>';
+  lucide.createIcons();
+}
+$('history-search').addEventListener('input', e => { historyQuery = e.target.value; renderHistory(); });
+$('history-range').addEventListener('change', e => { historyRange = e.target.value; renderHistory(); });
+
+/* ---------- ANALYTICS TAB ---------- */
+function renderAnalytics() {
+  const defs = [['daily','Daily'],['weekly','Weekly'],['monthly','Monthly'],['yearly','Yearly']];
+  $('analytics-chips').innerHTML = defs.map(([k,l]) =>
+    '<button onclick="setAnalyticsPeriod(\'' + k + '\')" class="text-xs font-semibold px-3.5 py-2 rounded-full transition ' + (analyticsPeriod===k ? 'bg-sc-brown text-sc-yellow' : 'bg-white text-sc-brown border border-[#EC6426]/25 hover:border-sc-orange') + '">' + l + '</button>'
+  ).join('');
+  const start = periodStart(analyticsPeriod);
+  const inRange = ALL_ORDERS.filter(o => new Date(o.created_at) >= start && o.status === 'completed');
+  const agg = {};
+  inRange.forEach(o => o.items.forEach(i => { if (!agg[i.name]) agg[i.name] = { qty:0, revenue:0 }; agg[i.name].qty += i.quantity; agg[i.name].revenue += i.subtotal; }));
+  const all = Object.values(agg);
+  const top = [...all].sort((a,b)=>b.qty-a.qty).slice(0,10);
+  const maxQty = top.length ? top[0].qty : 1;
+  const totalRevenue = inRange.reduce((s,o)=>s+(o.total_amount||0),0);
+  const itemsSold = all.reduce((s,t)=>s+t.qty,0);
+  const aov = inRange.length ? Math.round(totalRevenue/inRange.length) : 0;
+  $('analytics-summary').innerHTML =
+    statCard('Revenue', fmt(totalRevenue)) +
+    statCard('Completed Orders', inRange.length) +
+    statCard('Items Sold', itemsSold) +
+    statCard('Avg Order', fmt(aov));
+  $('analytics-range-label').textContent = PERIOD_LABEL[analyticsPeriod] + ' · completed orders only';
+  $('analytics-bars').innerHTML = top.length ? top.map(t => {
+    const pct = Math.max(4, Math.round(t.qty / maxQty * 100));
+    return '<div><div class="flex justify-between text-sm mb-1"><span class="font-semibold text-sc-brown">' + esc(t.name) + ' <span class="text-stone-400 font-normal">×' + t.qty + '</span></span><span class="text-stone-500">' + fmt(t.revenue) + '</span></div><div class="h-3 bg-stone-100 rounded-full overflow-hidden"><div class="bar-fill h-full bg-gradient-to-r from-sc-orange to-sc-yellow rounded-full" style="width:' + pct + '%"></div></div></div>';
+  }).join('') : '<p class="text-center text-stone-400 py-8">No completed orders in this period yet.</p>';
+  lucide.createIcons();
+}
+window.setAnalyticsPeriod = p => { analyticsPeriod = p; renderAnalytics(); };
+
+/* ---------- ADVANCE ORDER ---------- */
+window.advanceOrder = async (id) => {
+  const o = ALL_ORDERS.find(x => x.id === id); if (!o) return;
+  const m = STATUS_META[o.status]; if (!m || !m.next) return;
+  const { error } = await db.from('orders').update({ status: m.next }).eq('id', id);
+  if (error) { showToast('Failed: ' + error.message, 'error'); return; }
+  const phone = waPhone(o.customer_phone);
+  if (phone && STATUS_MSG[m.next]) window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent('Hi ' + o.customer_name + '! ' + STATUS_MSG[m.next] + '\n\nOrder #' + o.order_code + ' — Street Chefs 🍢'), '_blank');
+  showToast('Order #' + o.order_code + ' → ' + STATUS_META[m.next].label);
+  await loadAllOrders(); renderCurrentOrders();
+};
+
+/* ---------- MENU MANAGER ---------- */
+async function loadMenuManager() {
+  const c = await db.from('menu_categories').select('*').order('display_order');
+  const i = await db.from('menu_items').select('*').order('display_order');
+  CATS = c.data || []; ITEMS = i.data || [];
+  const box = $('menu-manager');
+  if (!CATS.length) { box.innerHTML = '<p class="text-center text-stone-400 py-10">No categories yet. Add one to start building your menu.</p>'; return; }
+  box.innerHTML = CATS.map(cat => {
+    const items = ITEMS.filter(it => it.category_id === cat.id);
+    return '<div class="bg-white rounded-2xl border border-[#EC6426]/15 p-5"><div class="flex items-center justify-between mb-4"><h3 class="disp text-lg font-extrabold text-sc-brown">' + esc(cat.name) + '</h3><button onclick="deleteCategory(\'' + cat.id + '\')" class="text-xs text-stone-400 hover:text-red-600 transition">Delete category</button></div><div class="space-y-2">' +
+      (items.length ? items.map(it =>
+        '<div class="flex items-center gap-3 p-3 rounded-xl bg-sc-cream/50 border border-[#EC6426]/10"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><p class="text-sm font-semibold text-sc-brown">' + esc(it.name) + '</p>' +
+        (it.badge==='best' ? '<span class="text-[9px] font-bold uppercase bg-sc-yellow text-sc-brown rounded-full px-2 py-0.5">★ Best</span>' : '') +
+        (it.badge==='chef' ? '<span class="text-[9px] font-bold uppercase bg-sc-brown text-sc-yellow rounded-full px-2 py-0.5">Chef\'s</span>' : '') +
+        ((it.tags||[]).map(t => '<span class="text-[9px] font-semibold ' + (t==='spicy'?'text-sc-orange':'text-green-700') + '">' + esc(t) + '</span>').join('')) +
+        '</div><p class="text-xs text-stone-500 mt-0.5">' + fmt(it.price) + '</p></div>' +
+        '<button onclick="toggleAvail(\'' + it.id + '\',' + !it.is_available + ')" class="w-11 h-6 rounded-full relative transition flex-shrink-0 ' + (it.is_available?'bg-green-500':'bg-stone-300') + '"><span class="absolute top-0.5 ' + (it.is_available?'right-0.5':'left-0.5') + ' w-5 h-5 bg-white rounded-full shadow transition-all"></span></button>' +
+        '<button onclick="editItem(\'' + it.id + '\')" class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-sc-brown hover:bg-sc-yellow/30 transition"><i data-lucide="pencil" class="w-4 h-4"></i></button>' +
+        '<button onclick="deleteItem(\'' + it.id + '\')" class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-red-500 hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>'
+      ).join('') : '<p class="text-xs text-stone-400">No items in this category.</p>') +
+    '</div></div>';
+  }).join('');
+  lucide.createIcons();
+}
+window.toggleAvail = async (id, val) => { const { error } = await db.from('menu_items').update({ is_available: val }).eq('id', id); if (error) showToast('Failed: ' + error.message, 'error'); else { showToast(val?'Item available':'Item hidden'); loadMenuManager(); } };
+window.deleteItem = async (id) => { const it = ITEMS.find(x=>x.id===id); if (!confirm('Delete "' + (it?it.name:'this item') + '"?')) return; const { error } = await db.from('menu_items').delete().eq('id', id); if (error) { showToast('Failed: ' + error.message, 'error'); return; } showToast('Item deleted'); loadMenuManager(); };
+window.deleteCategory = async (id) => { const cat = CATS.find(x=>x.id===id); if (!confirm('Delete "' + (cat?cat.name:'this category') + '" and ALL its items?')) return; const { error } = await db.from('menu_categories').delete().eq('id', id); if (error) { showToast('Failed: ' + error.message, 'error'); return; } showToast('Category deleted'); loadMenuManager(); };
+function fillCatSelect() { $('it-cat').innerHTML = CATS.map(c => '<option value="' + c.id + '">' + esc(c.name) + '</option>').join(''); }
+window.editItem = (id) => { const it = ITEMS.find(x=>x.id===id); if (!it) return; $('item-modal-title').textContent = 'Edit Item'; $('it-id').value = it.id; $('it-name').value = it.name; $('it-price').value = it.price; $('it-badge').value = it.badge||''; $('it-tags').value = (it.tags||[]).join(', '); $('it-note').value = it.chef_note||''; fillCatSelect(); $('it-cat').value = it.category_id; openModal('item-bg','item-modal'); };
+$('add-item-btn').addEventListener('click', () => { if (!CATS.length) { showToast('Add a category first','error'); return; } $('item-modal-title').textContent='New Item'; $('item-form').reset(); $('it-id').value=''; fillCatSelect(); openModal('item-bg','item-modal'); });
+$('item-close').addEventListener('click', () => closeModal('item-bg','item-modal'));
+$('item-bg').addEventListener('click', () => closeModal('item-bg','item-modal'));
+$('item-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = $('it-id').value;
+  const payload = { name:$('it-name').value.trim(), category_id:$('it-cat').value, price:parseInt($('it-price').value)||0, badge:$('it-badge').value||null, tags:$('it-tags').value.split(',').map(t=>t.trim().toLowerCase()).filter(Boolean), chef_note:$('it-note').value.trim()||null };
+  const q = id ? db.from('menu_items').update(payload).eq('id', id) : db.from('menu_items').insert(payload);
+  const { error } = await q;
+  if (error) { showToast('Failed: ' + error.message, 'error'); return; }
+  showToast(id?'Item updated':'Item added'); closeModal('item-bg','item-modal'); loadMenuManager();
+});
+$('add-cat-btn').addEventListener('click', () => { $('cat-name').value=''; openModal('cat-bg','cat-modal'); });
+$('cat-bg').addEventListener('click', () => closeModal('cat-bg','cat-modal'));
+$('cat-form').addEventListener('submit', async e => { e.preventDefault(); const name=$('cat-name').value.trim(); if (!name) return; const { error } = await db.from('menu_categories').insert({ name }); if (error) { showToast('Failed: ' + error.message, 'error'); return; } showToast('Category added'); closeModal('cat-bg','cat-modal'); loadMenuManager(); });
+
+/* ---------- REVIEWS ---------- */
+async function loadReviews() {
+  const { data } = await db.from('reviews').select('*').order('created_at', { ascending:false }).limit(50);
+  const box = $('reviews-admin');
+  if (!data || !data.length) { box.innerHTML = '<p class="text-center text-stone-400 py-10 col-span-full">No reviews yet.</p>'; return; }
+  box.innerHTML = data.map(r =>
+    '<div class="bg-white rounded-2xl border p-5 ' + (r.is_approved?'border-green-300':'border-[#EC6426]/15') + '"><div class="flex items-start justify-between mb-2"><div><p class="font-semibold text-sc-brown text-sm">' + esc(r.customer_name) + '</p><p class="text-xs text-stone-400">' + new Date(r.created_at).toLocaleDateString('en-UG') + '</p></div><span class="text-[10px] font-bold px-2 py-1 rounded-full ' + (r.is_approved?'bg-green-100 text-green-700':'bg-stone-100 text-stone-500') + '">' + (r.is_approved?'LIVE':'PENDING') + '</span></div><p class="text-sc-orange mb-1">' + '★'.repeat(r.rating) + '<span class="text-stone-200">' + '★'.repeat(5-r.rating) + '</span></p>' + (r.comment ? '<p class="text-sm text-stone-600 mb-3">' + esc(r.comment) + '</p>' : '<div class="mb-3"></div>') + '<div class="flex gap-2"><button onclick="toggleReview(\'' + r.id + '\',' + !r.is_approved + ')" class="text-xs font-semibold px-3 py-2 rounded-xl transition ' + (r.is_approved?'bg-stone-100 text-stone-600 hover:bg-stone-200':'bg-green-500 text-white hover:bg-green-600') + '">' + (r.is_approved?'Hide':'Approve') + '</button><button onclick="deleteReview(\'' + r.id + '\')" class="text-xs font-semibold px-3 py-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition">Delete</button></div></div>'
+  ).join('');
+}
+window.toggleReview = async (id, val) => { await db.from('reviews').update({ is_approved: val }).eq('id', id); showToast(val?'Review approved':'Review hidden'); loadReviews(); };
+window.deleteReview = async (id) => { if (!confirm('Delete this review?')) return; await db.from('reviews').delete().eq('id', id); showToast('Review deleted'); loadReviews(); };
+
+/* ---------- CUSTOMERS ---------- */
+async function loadCustomers() {
+  const { data } = await db.from('customers').select('*').order('created_at', { ascending:false });
+  const box = $('customers-list');
+  if (!data || !data.length) { box.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-stone-400">No customers yet.</td></tr>'; return; }
+  box.innerHTML = data.map(c =>
+    '<tr class="hover:bg-sc-cream/40 transition"><td class="px-5 py-3 font-semibold text-sc-brown">' + esc(c.full_name||'—') + '</td><td class="px-5 py-3 text-stone-500">' + esc(c.email||'—') + '</td><td class="px-5 py-3 text-stone-500">' + esc(c.phone_number||'—') + '</td><td class="px-5 py-3"><span class="text-xs font-bold bg-sc-yellow/20 text-sc-brown rounded-full px-2.5 py-1">' + (c.points||0) + ' pts</span></td><td class="px-5 py-3"><button onclick="adjustPoints(\'' + c.id + '\',' + (c.points||0) + ')" class="text-xs font-semibold bg-sc-cream text-sc-brown px-3 py-1.5 rounded-lg hover:bg-sc-yellow/40 transition">Adjust</button></td></tr>'
+  ).join('');
+}
+window.adjustPoints = async (id, current) => {
+  const v = prompt('Current balance: ' + current + ' pts.\nEnter the new balance:');
+  if (v === null) return;
+  const n = parseInt(v, 10);
+  if (isNaN(n) || n < 0) { showToast('Enter a valid number','error'); return; }
+  const delta = n - current; if (delta === 0) return;
+  const { error } = await db.from('customers').update({ points: n }).eq('id', id);
+  if (error) { showToast('Failed: ' + error.message, 'error'); return; }
+  await db.from('points_log').insert({ customer_id: id, type:'adjust', points: delta, note:'Adjusted by admin' });
+  showToast('Points updated'); loadCustomers();
+};
+
+/* ---------- STAFF ---------- */
+async function loadStaff() {
+  const { data } = await db.from('staff_members').select('*').order('created_at', { ascending:false });
+  const box = $('staff-list'); const isOwner = currentStaff && currentStaff.role === 'owner';
+  if (!data || !data.length) { box.innerHTML = '<p class="text-center text-stone-400 py-10">No staff members yet.</p>'; return; }
+  box.innerHTML = data.map(s =>
+    '<div class="bg-white rounded-2xl border border-[#EC6426]/15 p-4 flex items-center gap-3 fade-in"><div class="w-10 h-10 rounded-full bg-sc-brown text-sc-yellow flex items-center justify-center font-bold text-lg flex-shrink-0">' + esc(s.email.charAt(0).toUpperCase()) + '</div><div class="flex-1 min-w-0"><p class="font-semibold text-sc-brown text-sm truncate">' + esc(s.email) + (s.email===currentStaff.email ? ' <span class="text-[10px] text-stone-400">(you)</span>' : '') + '</p><p class="text-xs text-stone-400">Added ' + new Date(s.created_at).toLocaleDateString('en-UG') + '</p></div><span class="text-[10px] font-bold px-2.5 py-1 rounded-full ' + (s.role==='owner'?'bg-sc-yellow/20 text-sc-brown':'bg-sc-cream text-stone-600') + '">' + esc(s.role).toUpperCase() + '</span>' + (isOwner && s.email!==currentStaff.email ? '<button onclick="removeStaff(\'' + s.id + '\')" class="text-red-400 hover:text-red-600 transition p-2 rounded-lg hover:bg-red-50"><i data-lucide="trash-2" class="w-4 h-4"></i></button>' : '') + '</div>'
+  ).join('');
+  lucide.createIcons();
+}
+$('add-staff-btn').addEventListener('click', () => { $('staff-email').value=''; $('staff-role').value='staff'; $('staff-error').classList.add('hidden'); openModal('staff-bg','staff-modal'); });
+$('staff-close').addEventListener('click', () => closeModal('staff-bg','staff-modal'));
+$('staff-bg').addEventListener('click', () => closeModal('staff-bg','staff-modal'));
+$('staff-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('staff-email').value.trim().toLowerCase(), role = $('staff-role').value;
+  $('staff-error').classList.add('hidden');
+  const { error } = await db.from('staff_members').insert({ email, role });
+  if (error) { $('staff-error').textContent = error.message.includes('duplicate') ? 'That email is already on the staff list.' : 'Failed: ' + error.message; $('staff-error').classList.remove('hidden'); return; }
+  showToast('Staff member added: ' + email); closeModal('staff-bg','staff-modal'); loadStaff();
+});
+window.removeStaff = async (id) => { if (!confirm('Remove this person? They lose dashboard access immediately.')) return; const { error } = await db.from('staff_members').delete().eq('id', id); if (error) { showToast('Failed: ' + error.message, 'error'); return; } showToast('Staff member removed'); loadStaff(); };
+
+/* ---------- SETTINGS: SITE TEXT ---------- */
+async function loadSiteText() {
+  const { data } = await db.from('site_content').select('*');
+  const m = {}; (data||[]).forEach(r => m[r.key] = r.value);
+  $('st-hero').value = m.hero_tagline||''; $('st-announcement').value = m.announcement||'';
+  $('st-hours-weekday').value = m.hours_weekday||''; $('st-hours-sunday').value = m.hours_sunday||''; $('st-address').value = m.address||'';
+}
+$('save-sitetext').addEventListener('click', async () => {
+  const rows = [ {key:'hero_tagline',value:$('st-hero').value.trim()}, {key:'announcement',value:$('st-announcement').value.trim()}, {key:'hours_weekday',value:$('st-hours-weekday').value.trim()}, {key:'hours_sunday',value:$('st-hours-sunday').value.trim()}, {key:'address',value:$('st-address').value.trim()} ];
+  for (const r of rows) await db.from('site_content').upsert(r, { onConflict:'key' });
+  showToast('Site text saved — live on the front end');
+});
+
+/* ---------- SETTINGS: REWARDS ---------- */
+async function loadRewards() {
+  const { data } = await db.from('reward_settings').select('*');
+  const m = {}; (data||[]).forEach(r => m[r.key] = Number(r.value)||0);
+  $('rw-earn').value = m.earn_rate ?? 1; $('rw-redeem').value = m.redeem_value ?? 100;
+  const { data: cust } = await db.from('customers').select('points');
+  const liab = (cust||[]).reduce((s,c)=>s+(c.points||0),0);
+  if (liab > 0) { $('rw-liability').classList.remove('hidden'); $('rw-liability').innerHTML = '<p class="text-[10px] uppercase tracking-widest text-stone-400">Outstanding points liability</p><p class="disp text-xl font-extrabold text-sc-brown mt-1">' + liab.toLocaleString() + ' pts <span class="text-sm font-semibold text-stone-500">≈ ' + fmt(liab*(m.redeem_value||100)) + '</span></p>'; }
+}
+$('save-rewards').addEventListener('click', async () => {
+  await db.from('reward_settings').upsert({ key:'earn_rate', value:$('rw-earn').value }, { onConflict:'key' });
+  await db.from('reward_settings').upsert({ key:'redeem_value', value:$('rw-redeem').value }, { onConflict:'key' });
+  showToast('Reward settings saved'); loadRewards();
+});
+async function loadCodes() {
+  const { data } = await db.from('discount_codes').select('*').order('created_at', { ascending:false });
+  const box = $('codes-list');
+  if (!data || !data.length) { box.innerHTML = '<p class="text-xs text-stone-400">No discount codes yet.</p>'; return; }
+  box.innerHTML = data.map(d =>
+    '<div class="flex items-center gap-3 p-3 rounded-xl bg-sc-cream/50 border border-[#EC6426]/10"><span class="word text-sm text-sc-brown">' + esc(d.code) + '</span><span class="text-xs text-stone-500">' + (d.type==='percent'? d.value+'% off' : fmt(d.value)+' off') + '</span><span class="flex-1"></span><button onclick="toggleCode(\'' + d.id + '\',' + !d.active + ')" class="text-[10px] font-bold px-2.5 py-1 rounded-full ' + (d.active?'bg-green-100 text-green-700':'bg-stone-100 text-stone-500') + '">' + (d.active?'ACTIVE':'OFF') + '</button><button onclick="deleteCode(\'' + d.id + '\')" class="text-red-400 hover:text-red-600 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>'
+  ).join('');
+  lucide.createIcons();
+}
+$('dc-add').addEventListener('click', async () => {
+  const code = $('dc-code').value.trim().toUpperCase(), value = parseFloat($('dc-value').value);
+  if (!code || !value) { showToast('Enter a code and value','error'); return; }
+  const { error } = await db.from('discount_codes').insert({ code, type:$('dc-type').value, value });
+  if (error) { showToast(error.message.includes('duplicate')?'That code already exists':'Failed: '+error.message,'error'); return; }
+  $('dc-code').value=''; $('dc-value').value=''; showToast('Code ' + code + ' created'); loadCodes();
+});
+window.toggleCode = async (id, val) => { await db.from('discount_codes').update({ active: val }).eq('id', id); loadCodes(); };
+window.deleteCode = async (id) => { if (!confirm('Delete this code?')) return; await db.from('discount_codes').delete().eq('id', id); showToast('Code deleted'); loadCodes(); };
+
+/* ---------- SETTINGS: LOCATION ---------- */
+async function loadLocation() { const { data } = await db.from('site_content').select('*').eq('key','delivery_location').maybeSingle(); $('loc-input').value = data ? data.value : ''; }
+$('loc-save').addEventListener('click', async () => { await db.from('site_content').upsert({ key:'delivery_location', value:$('loc-input').value.trim() }, { onConflict:'key' }); showToast('Delivery location saved'); });
+$('loc-open').addEventListener('click', () => { const v = $('loc-input').value.trim(); if (!v) return; window.open(v.startsWith('http')? v : 'https://www.google.com/maps?q=' + encodeURIComponent(v), '_blank'); });
+
+/* ---------- CLOCK ---------- */
+setInterval(() => { $('clock').textContent = new Date().toLocaleTimeString('en-UG', { hour:'2-digit', minute:'2-digit' }); }, 1000);
+</script>
+</body>
+</html>
