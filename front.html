@@ -46,6 +46,7 @@ tailwind.config = {
   .whatsapp-loc-btn { display:inline-flex; align-items:center; gap:8px; background:#25D366; color:#fff; font-weight:600; padding:14px 24px; border-radius:12px; text-decoration:none; font-size:15px; transition:all .2s; width:100%; justify-content:center; }
   .whatsapp-loc-btn:hover { background:#1ebe5b; transform:translateY(-1px); }
   .pts-chip { cursor:pointer; transition: background .2s; } .pts-chip:hover { background: rgba(236,100,38,.15); }
+  .info-chev { transition: transform .25s; }
   #toast-wrap { pointer-events:none; }
   .toast { animation: toastIn .35s cubic-bezier(.16,1,.3,1) both; }
   @keyframes toastIn { from { opacity:0; transform:translateY(12px) scale(.95); } to { opacity:1; transform:none; } }
@@ -56,7 +57,7 @@ tailwind.config = {
 
 <div id="toast-wrap" class="fixed top-20 right-4 z-[120] space-y-2 w-[min(90vw,320px)]"></div>
 
-<!-- ===== HEADER ===== -->
+<!-- HEADER -->
 <header class="sticky top-0 z-40 bg-[#FDE3CF]/90 backdrop-blur border-b border-[#EC6426]/20">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-2 sm:gap-3">
     <button id="nav-open" class="md:hidden text-sc-brown hover:text-sc-orange p-2 rounded-xl hover:bg-white transition" aria-label="Open menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
@@ -100,7 +101,7 @@ tailwind.config = {
   </div>
 </header>
 
-<!-- ===== MOBILE DRAWER ===== -->
+<!-- MOBILE DRAWER -->
 <div id="nav-backdrop" class="fixed inset-0 z-[45] bg-sc-brown/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity md:hidden"></div>
 <aside id="nav-drawer" class="fixed z-[50] top-0 left-0 h-full w-[80%] max-w-xs bg-[#FDE3CF] shadow-2xl p-5 flex flex-col gap-1 -translate-x-full transition-transform duration-300 md:hidden">
   <div class="flex items-center justify-between mb-4">
@@ -133,7 +134,7 @@ tailwind.config = {
   </div>
 </aside>
 
-<!-- ===== HOME / MENU ===== -->
+<!-- HOME / MENU -->
 <main id="page-home" class="max-w-6xl mx-auto px-4">
   <section class="text-center pt-10 sm:pt-14 pb-8">
     <h1 class="word text-4xl sm:text-6xl text-sc-brown">Street Chefs</h1>
@@ -150,7 +151,7 @@ tailwind.config = {
   <p id="no-results" class="hidden text-center py-10 text-stone-500">Nothing matches that search.</p>
 </main>
 
-<!-- ===== REVIEWS ===== -->
+<!-- REVIEWS -->
 <main id="page-reviews" class="hidden max-w-3xl mx-auto px-4 pt-10 pb-16">
   <div class="text-center mb-8">
     <button data-page="home" class="text-sm text-sc-orange font-semibold flex items-center gap-1 mx-auto mb-4"><i data-lucide="arrow-left" class="w-4 h-4"></i>Back to Menu</button>
@@ -179,7 +180,7 @@ tailwind.config = {
   </div>
 </main>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer class="bg-sc-brown text-sc-cream/70 py-10 px-4 mt-10">
   <div class="max-w-6xl mx-auto grid sm:grid-cols-3 gap-8 text-center sm:text-left text-sm">
     <div><p class="word text-sc-yellow text-base mb-2">Street Chefs</p><p>Café · Grill · Restaurant</p><p id="f-address" class="text-xs mt-1 text-sc-cream/50">Kampala, Uganda</p></div>
@@ -188,7 +189,7 @@ tailwind.config = {
   </div>
 </footer>
 
-<!-- ===== ORDER BAR ===== -->
+<!-- FLOATING ORDER BAR -->
 <div id="order-bar" class="hide fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md">
   <div class="bg-sc-brown text-white rounded-2xl shadow-2xl p-3 pl-5 flex items-center gap-2">
     <div class="flex-1 min-w-0">
@@ -204,7 +205,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ===== CART MODAL ===== -->
+<!-- CART MODAL -->
 <div id="cart-backdrop" class="modal-bg fixed inset-0 z-50 bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="cart-drawer" class="modal-card fixed z-[60] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl flex flex-col max-h-[84vh]">
   <div class="flex items-center justify-between p-5 border-b border-stone-100">
@@ -225,7 +226,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ===== DELIVERY / CHECKOUT MODAL ===== -->
+<!-- DELIVERY / CHECKOUT -->
 <div id="delivery-backdrop" class="modal-bg fixed inset-0 z-[70] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="delivery-modal" class="modal-card fixed z-[80] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl max-h-[88vh] overflow-y-auto">
   <div class="p-6">
@@ -244,7 +245,6 @@ tailwind.config = {
       </div>
       <p id="d-code-status" class="text-xs text-center"></p>
 
-      <!-- REDEEM POINTS -->
       <div id="redeem-box" class="hidden bg-sc-yellow/10 border border-sc-yellow/50 rounded-xl p-4">
         <label class="flex items-center justify-between cursor-pointer gap-3">
           <span class="text-sm font-semibold text-sc-brown flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 text-sc-orange"></i>Redeem my points</span>
@@ -259,7 +259,6 @@ tailwind.config = {
 
       <textarea id="d-notes" rows="2" placeholder="Notes (optional)" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></textarea>
 
-      <!-- FINAL TOTAL -->
       <div class="bg-sc-cream rounded-xl px-4 py-3 space-y-1 text-sm">
         <div class="flex justify-between text-green-700 hidden" id="d-discount-row"><span>Discount</span><span id="d-discount-amt">−UGX 0</span></div>
         <div class="flex justify-between text-sc-orange hidden" id="d-points-row"><span id="d-points-label">Points redeemed</span><span id="d-points-amt">−UGX 0</span></div>
@@ -272,7 +271,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ===== AUTH MODAL ===== -->
+<!-- AUTH MODAL -->
 <div id="auth-backdrop" class="modal-bg fixed inset-0 z-[85] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="auth-modal" class="modal-card fixed z-[90] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7 max-h-[88vh] overflow-y-auto">
   <div class="flex items-center justify-between mb-4">
@@ -294,7 +293,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ===== RESET MODAL ===== -->
+<!-- PASSWORD RESET -->
 <div id="reset-backdrop" class="modal-bg fixed inset-0 z-[92] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="reset-modal" class="modal-card fixed z-[93] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-7">
   <h2 class="disp text-xl font-extrabold text-sc-brown mb-4">Set a new password</h2>
@@ -306,7 +305,7 @@ tailwind.config = {
   </form>
 </div>
 
-<!-- ===== MY REWARDS MODAL ===== -->
+<!-- MY REWARDS -->
 <div id="rew-backdrop" class="modal-bg fixed inset-0 z-[86] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="rew-modal" class="modal-card fixed z-[87] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-7 max-h-[88vh] overflow-y-auto">
   <div class="flex items-center justify-between mb-4">
@@ -326,7 +325,7 @@ tailwind.config = {
   <div id="rew-history" class="space-y-2"></div>
 </div>
 
-<!-- ===== SUCCESS MODAL ===== -->
+<!-- SUCCESS -->
 <div id="success-backdrop" class="modal-bg fixed inset-0 z-[90] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="success-modal" class="modal-card fixed z-[95] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7 text-center">
   <div class="w-14 h-14 rounded-full bg-sc-yellow/20 text-sc-orange flex items-center justify-center mx-auto mb-3"><i data-lucide="check" class="w-7 h-7"></i></div>
@@ -342,7 +341,7 @@ tailwind.config = {
   <button id="success-done" class="w-full bg-stone-100 text-stone-700 py-3 rounded-xl font-semibold">Done</button>
 </div>
 
-<!-- ===== TRACK MODAL ===== -->
+<!-- TRACK -->
 <div id="track-backdrop" class="modal-bg fixed inset-0 z-[90] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="track-modal" class="modal-card fixed z-[95] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7">
   <div class="flex items-center justify-between mb-4">
@@ -384,7 +383,6 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 let MENU = [], byId = {}, cart = {}, user = null, profile = null, appliedDiscount = null, redeemOn = false;
 let reward = { earn_rate: 1, redeem_value: 100 };
 
-/* ---------- TOAST ---------- */
 function showToast(msg, type = 'success') {
   const wrap = $('toast-wrap');
   const t = document.createElement('div');
@@ -395,7 +393,6 @@ function showToast(msg, type = 'success') {
   setTimeout(() => { t.style.transition = 'all .3s'; t.style.opacity = '0'; t.style.transform = 'translateY(-8px)'; setTimeout(() => t.remove(), 300); }, 2600);
 }
 
-/* ---------- SITE CONTENT ---------- */
 async function loadContent() {
   const { data } = await db.from('site_content').select('*');
   const m = {}; (data || []).forEach(r => m[r.key] = r.value);
@@ -411,7 +408,6 @@ async function loadContent() {
   (r.data || []).forEach(x => { reward[x.key] = Number(x.value) || 0; });
 }
 
-/* ---------- MENU ---------- */
 function menuSkeleton() {
   let c = '';
   for (let i = 0; i < 6; i++) c += '<div class="rounded-2xl bg-white border border-[#EC6426]/10 shadow-sm p-5"><div class="skeleton h-5 w-3/4 mb-3"></div><div class="skeleton h-3 w-full mb-2"></div><div class="skeleton h-3 w-2/3 mb-4"></div><div class="flex justify-between items-center mt-4"><div class="skeleton h-5 w-20"></div><div class="skeleton h-8 w-8 rounded-full"></div></div></div>';
@@ -424,7 +420,7 @@ async function loadMenu() {
   const i = await db.from('menu_items').select('*').eq('is_available', true).order('display_order');
   MENU = (c.data || []).map(ct => ({
     cat: ct.name,
-    items: (i.data || []).filter(it => it.category_id === ct.id).map(it => ({ id: it.id, name: it.name, price: it.price, b: it.badge, t: it.tags, note: it.chef_note || it.description }))
+    items: (i.data || []).filter(it => it.category_id === ct.id).map(it => ({ id: it.id, name: it.name, price: it.price, b: it.badge, t: it.tags, note: it.chef_note || it.description, img: it.image_url || null }))
   })).filter(x => x.items.length);
   byId = {}; MENU.forEach(s => s.items.forEach(it => byId[it.id] = it));
   render();
@@ -443,12 +439,16 @@ function render() {
   MENU.forEach(s => {
     h += '<section class="menu-section mb-12 reveal"><div class="flex items-center gap-4 mb-5"><h2 class="disp text-2xl font-extrabold text-sc-brown whitespace-nowrap">' + esc(s.cat) + '</h2><div class="flex-1 h-px bg-sc-orange/30"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">';
     s.items.forEach(item => {
-      h += '<div class="menu-card menu-item flex flex-col rounded-2xl bg-white border border-[#EC6426]/15 shadow-sm p-5" data-name="' + esc(item.name.toLowerCase()) + '">' +
-        '<div class="flex items-start justify-between gap-2 mb-1"><h3 class="font-semibold text-sc-brown leading-snug">' + esc(item.name) + '</h3>' + badgeHtml(item.b) + '</div>' +
-        (item.note ? '<p class="text-xs text-stone-500 leading-relaxed mb-2">' + esc(item.note) + '</p>' : '') +
-        ((item.t && item.t.length) ? '<div class="flex flex-wrap gap-1.5 mb-2">' + tagHtml(item.t) + '</div>' : '') +
-        '<div class="flex-1"></div>' +
-        '<div class="flex items-center justify-between mt-3 pt-3 border-t border-[#EC6426]/10"><span class="font-bold text-sc-brown">UGX ' + item.price.toLocaleString() + '</span><div data-ctl="' + item.id + '">' + ctlHtml(item.id) + '</div></div>' +
+      h += '<div class="menu-card menu-item flex flex-col rounded-2xl bg-white border border-[#EC6426]/15 shadow-sm overflow-hidden" data-name="' + esc(item.name.toLowerCase()) + '">' +
+        (item.img ? '<div class="aspect-[4/3] bg-sc-cream overflow-hidden"><img src="' + esc(item.img) + '" alt="' + esc(item.name) + '" loading="lazy" class="w-full h-full object-cover" onerror="this.parentElement.style.display=\'none\'"></div>' : '') +
+        '<div class="flex flex-col flex-1 p-5">' +
+          '<div class="flex items-start justify-between gap-2 mb-1"><h3 class="font-semibold text-sc-brown leading-snug">' + esc(item.name) + '</h3>' + badgeHtml(item.b) + '</div>' +
+          ((item.t && item.t.length) ? '<div class="flex flex-wrap gap-1.5 mb-1">' + tagHtml(item.t) + '</div>' : '') +
+          (item.note ? '<button data-info="' + item.id + '" class="self-start flex items-center gap-1 text-[11px] font-semibold text-sc-orange hover:underline mt-0.5"><span class="info-label">Details</span><i data-lucide="chevron-down" class="w-3.5 h-3.5 info-chev"></i></button>' +
+          '<div data-infobox="' + item.id + '" class="hidden mt-2 text-xs text-stone-600 leading-relaxed bg-sc-cream/70 rounded-xl px-3 py-2.5 border border-[#EC6426]/10">' + esc(item.note) + '</div>' : '') +
+          '<div class="flex-1"></div>' +
+          '<div class="flex items-center justify-between mt-3 pt-3 border-t border-[#EC6426]/10"><span class="font-bold text-sc-brown">UGX ' + item.price.toLocaleString() + '</span><div data-ctl="' + item.id + '">' + ctlHtml(item.id) + '</div></div>' +
+        '</div>' +
       '</div>';
     });
     h += '</div></section>';
@@ -456,6 +456,19 @@ function render() {
   root.innerHTML = h || '<p class="text-center text-stone-400 py-10">Menu is being updated — check back soon.</p>';
   $('index').innerHTML = MENU.map((s, i) => '<button data-goto="' + i + '" class="chip text-[11px] sm:text-xs font-semibold text-sc-brown bg-white border border-[#EC6426]/25 rounded-full px-3 py-1.5">' + esc(s.cat) + '</button>').join('');
   lucide.createIcons(); observe();
+}
+
+function toggleInfo(id) {
+  const box = document.querySelector('[data-infobox="' + id + '"]');
+  const btn = document.querySelector('[data-info="' + id + '"]');
+  if (!box) return;
+  const nowHidden = box.classList.toggle('hidden');
+  if (btn) {
+    const chev = btn.querySelector('.info-chev');
+    const label = btn.querySelector('.info-label');
+    if (chev) chev.style.transform = nowHidden ? '' : 'rotate(180deg)';
+    if (label) label.textContent = nowHidden ? 'Details' : 'Hide';
+  }
 }
 
 let io;
@@ -468,7 +481,6 @@ function observe() {
   setTimeout(() => els.forEach(el => el.classList.add('on')), 1500);
 }
 
-/* ---------- CART ---------- */
 const cartBg = $('cart-backdrop'), cartD = $('cart-drawer');
 const openCart = () => { renderCartList(); cartBg.classList.add('open'); cartD.classList.add('open'); document.body.style.overflow = 'hidden'; };
 const closeCart = () => { cartBg.classList.remove('open'); cartD.classList.remove('open'); document.body.style.overflow = ''; };
@@ -495,7 +507,6 @@ function clearCart() {
 function subtotal() { let t = 0; for (const id in cart) t += cart[id] * byId[id].price; return t; }
 function discountAmount(sub) { if (!appliedDiscount) return 0; return appliedDiscount.type === 'percent' ? Math.round(sub * appliedDiscount.value / 100) : Math.min(appliedDiscount.value, sub); }
 
-/* ---------- REWARDS MATH ---------- */
 function redeemablePoints(sub, disc) {
   if (!user || !profile || !reward.redeem_value) return 0;
   const balance = profile.points || 0;
@@ -564,11 +575,9 @@ function renderCartList() {
   }).join('');
 }
 
-/* ---------- MODALS ---------- */
 function openModal(bg, id) { $(bg).classList.add('open'); $(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModal(bg, id) { $(bg).classList.remove('open'); $(id).classList.remove('open'); document.body.style.overflow = ''; }
 
-/* ---------- DISCOUNT ---------- */
 $('d-apply').addEventListener('click', async () => {
   const code = $('d-code').value.trim().toUpperCase(); const st = $('d-code-status');
   if (!code) return;
@@ -580,7 +589,6 @@ $('d-apply').addEventListener('click', async () => {
 $('redeem-toggle').addEventListener('change', e => { redeemOn = e.target.checked; updateCheckoutTotals(); });
 $('redeem-login').addEventListener('click', () => { closeModal('delivery-backdrop', 'delivery-modal'); openAuth('login'); });
 
-/* ---------- CHECKOUT ---------- */
 const genCode = () => Array.from({ length: 8 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
 const waPhone = p => { let d = (p || '').replace(/\D/g, ''); if (!d) return ''; if (d.startsWith('0')) d = '256' + d.slice(1); else if (!d.startsWith('256')) d = '256' + d; return d; };
 
@@ -610,7 +618,6 @@ async function placeOrder(e) {
     if (oe) throw oe;
     const { error: ie } = await db.from('order_items').insert(Object.keys(cart).map(id => ({ order_id: od.id, menu_item_id: id, item_name_snapshot: byId[id].name, item_price_snapshot: byId[id].price, quantity: cart[id], subtotal: cart[id] * byId[id].price })));
     if (ie) throw ie;
-    /* Apply the points movement + write the ledger */
     if (user) {
       const newBalance = Math.max((profile.points || 0) - pointsRedeemed + pointsEarned, 0);
       await db.from('customers').update({ points: newBalance }).eq('id', user.id);
@@ -644,7 +651,6 @@ async function placeOrder(e) {
   if (user) await refreshUser();
 }
 
-/* ---------- MY REWARDS ---------- */
 async function openRewards() {
   if (!user) return;
   $('rew-balance').textContent = (profile?.points || 0).toLocaleString();
@@ -669,7 +675,6 @@ async function openRewards() {
   lucide.createIcons();
 }
 
-/* ---------- REVIEWS ---------- */
 let selectedRating = 0;
 $('star-rating').addEventListener('click', e => {
   const b = e.target.closest('[data-star]'); if (!b) return;
@@ -700,7 +705,6 @@ async function loadReviews() {
   }).join('');
 }
 
-/* ---------- AUTH ---------- */
 function setAuthMode(mode) {
   const s = mode === 'signup';
   $('auth-title').textContent = s ? 'Create Account' : 'Login';
@@ -806,7 +810,6 @@ db.auth.onAuthStateChange((event) => {
   if (event === 'PASSWORD_RECOVERY') { refreshUser(); openModal('reset-backdrop', 'reset-modal'); }
 });
 
-/* ---------- TRACKING ---------- */
 const STATUS_INDEX = { pending: 0, confirmed: 1, preparing: 2, ready: 3, out_for_delivery: 3, completed: 4 };
 let trackTimer = null;
 
@@ -846,7 +849,6 @@ async function trackByCode(code) {
   } finally { $('track-go').textContent = 'Track'; }
 }
 
-/* ---------- NAV / PAGES ---------- */
 function closeNav() { $('nav-drawer').classList.add('-translate-x-full'); $('nav-backdrop').classList.add('opacity-0', 'pointer-events-none'); }
 
 function showPage(p) {
@@ -866,7 +868,6 @@ function filter(q) {
   $('no-results').classList.toggle('hidden', any);
 }
 
-/* ---------- EVENT WIRING ---------- */
 $('nav-open').addEventListener('click', () => { $('nav-drawer').classList.remove('-translate-x-full'); $('nav-backdrop').classList.remove('opacity-0', 'pointer-events-none'); });
 $('nav-close').addEventListener('click', closeNav);
 $('nav-backdrop').addEventListener('click', closeNav);
@@ -884,13 +885,14 @@ $('auth-backdrop').addEventListener('click', () => closeModal('auth-backdrop', '
 $('logout').addEventListener('click', doLogout);
 $('m-logout').addEventListener('click', () => { closeNav(); doLogout(); });
 
-/* Points chips open My Rewards */
 $('acct-points-chip').addEventListener('click', openRewards);
 $('m-acct-points-chip').addEventListener('click', () => { closeNav(); openRewards(); });
 $('rew-close').addEventListener('click', () => closeModal('rew-backdrop', 'rew-modal'));
 $('rew-backdrop').addEventListener('click', () => closeModal('rew-backdrop', 'rew-modal'));
 
 $('menu').addEventListener('click', e => {
+  const info = e.target.closest('[data-info]');
+  if (info) { toggleInfo(info.dataset.info); return; }
   const a = e.target.closest('[data-add]'), i = e.target.closest('[data-inc]'), d = e.target.closest('[data-dec]');
   if (a) setQty(a.dataset.add, 1); else if (i) setQty(i.dataset.inc, 1); else if (d) setQty(d.dataset.dec, -1);
 });
@@ -937,7 +939,6 @@ window.addEventListener('hashchange', () => {
   else showPage(location.hash === '#reviews' ? 'reviews' : 'home');
 });
 
-/* ---------- INIT ---------- */
 (async () => {
   await enforceSessionExpiry();
   await refreshUser();
