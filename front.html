@@ -375,7 +375,7 @@ tailwind.config = {
 const SUPABASE_URL = 'https://jvcxgnypznyhkbcshxes.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2Y3hnbnlwem55aGtiY3NoeGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NDg4MzUsImV4cCI6MjEwMjEyNDgzNX0.ki8oAuaDYyEx8UpVWzXGDdruYOIfRLqP9SAqUlhVq9w';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const WHATSAPP = '256764256966';
+let WHATSAPP = '256764256966'; // default — overridden live from Settings
 const $ = id => document.getElementById(id);
 const SESSION_MAX_DAYS = 7;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -397,6 +397,7 @@ async function loadContent() {
   const { data } = await db.from('site_content').select('*');
   const m = {}; (data || []).forEach(r => m[r.key] = r.value);
   if (m.hero_tagline) $('hero-tagline').textContent = m.hero_tagline;
+  if (m.whatsapp_number) WHATSAPP = m.whatsapp_number;
   if (m.announcement) {
     $('announcement').textContent = m.announcement; $('announcement').classList.remove('hidden');
     $('m-announcement').textContent = m.announcement; $('m-announcement').classList.remove('hidden');
