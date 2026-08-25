@@ -57,10 +57,9 @@ tailwind.config = {
 
 <div id="toast-wrap" class="fixed top-20 right-4 z-[120] space-y-2 w-[min(90vw,320px)]"></div>
 
-<!-- HEADER -->
 <header class="sticky top-0 z-40 bg-[#FDE3CF]/90 backdrop-blur border-b border-[#EC6426]/20">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-2 sm:gap-3">
-    <button id="nav-open" class="md:hidden text-sc-brown hover:text-sc-orange p-2 rounded-xl hover:bg-white transition" aria-label="Open menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+    <button id="nav-open" class="md:hidden text-sc-brown hover:text-sc-orange p-2 rounded-xl hover:bg-white transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
     <a href="#home" data-page="home" class="w-9 h-9 rounded-xl bg-sc-brown text-sc-yellow flex items-center justify-center flex-shrink-0"><i data-lucide="flame" class="w-5 h-5"></i></a>
     <div class="min-w-0">
       <p class="word text-sc-brown leading-none text-sm sm:text-base">Street Chefs</p>
@@ -91,7 +90,7 @@ tailwind.config = {
             <p id="acct-points" class="text-[10px] text-sc-orange font-bold">0 pts</p>
           </div>
         </div>
-        <button id="logout" class="text-stone-400 hover:text-red-600 p-2 rounded-xl hover:bg-white transition" title="Logout"><i data-lucide="log-out" class="w-4 h-4"></i></button>
+        <button id="logout" class="text-stone-400 hover:text-red-600 p-2 rounded-xl hover:bg-white transition"><i data-lucide="log-out" class="w-4 h-4"></i></button>
       </div>
     </div>
     <button id="top-cart" class="relative text-sc-brown hover:text-sc-orange p-2 rounded-xl hover:bg-white transition">
@@ -101,7 +100,6 @@ tailwind.config = {
   </div>
 </header>
 
-<!-- MOBILE DRAWER -->
 <div id="nav-backdrop" class="fixed inset-0 z-[45] bg-sc-brown/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity md:hidden"></div>
 <aside id="nav-drawer" class="fixed z-[50] top-0 left-0 h-full w-[80%] max-w-xs bg-[#FDE3CF] shadow-2xl p-5 flex flex-col gap-1 -translate-x-full transition-transform duration-300 md:hidden">
   <div class="flex items-center justify-between mb-4">
@@ -134,7 +132,6 @@ tailwind.config = {
   </div>
 </aside>
 
-<!-- HOME / MENU -->
 <main id="page-home" class="max-w-6xl mx-auto px-4">
   <section class="text-center pt-10 sm:pt-14 pb-8">
     <h1 class="word text-4xl sm:text-6xl text-sc-brown">Street Chefs</h1>
@@ -151,7 +148,6 @@ tailwind.config = {
   <p id="no-results" class="hidden text-center py-10 text-stone-500">Nothing matches that search.</p>
 </main>
 
-<!-- REVIEWS -->
 <main id="page-reviews" class="hidden max-w-3xl mx-auto px-4 pt-10 pb-16">
   <div class="text-center mb-8">
     <button data-page="home" class="text-sm text-sc-orange font-semibold flex items-center gap-1 mx-auto mb-4"><i data-lucide="arrow-left" class="w-4 h-4"></i>Back to Menu</button>
@@ -180,7 +176,6 @@ tailwind.config = {
   </div>
 </main>
 
-<!-- FOOTER -->
 <footer class="bg-sc-brown text-sc-cream/70 py-10 px-4 mt-10">
   <div class="max-w-6xl mx-auto grid sm:grid-cols-3 gap-8 text-center sm:text-left text-sm">
     <div><p class="word text-sc-yellow text-base mb-2">Street Chefs</p><p>Café · Grill · Restaurant</p><p id="f-address" class="text-xs mt-1 text-sc-cream/50">Kampala, Uganda</p></div>
@@ -189,14 +184,13 @@ tailwind.config = {
   </div>
 </footer>
 
-<!-- FLOATING ORDER BAR -->
 <div id="order-bar" class="hide fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md">
   <div class="bg-sc-brown text-white rounded-2xl shadow-2xl p-3 pl-5 flex items-center gap-2">
     <div class="flex-1 min-w-0">
       <p class="text-[10px] uppercase tracking-widest text-sc-cream/60">Your order</p>
       <p id="bar-summary" class="text-sm font-semibold truncate">0 items · UGX 0</p>
     </div>
-    <button id="bar-clear" class="text-sc-cream/60 hover:text-red-400 p-2.5 rounded-xl hover:bg-white/10 transition" title="Clear cart"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+    <button id="bar-clear" class="text-sc-cream/60 hover:text-red-400 p-2.5 rounded-xl hover:bg-white/10 transition"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
     <button id="bar-cart" class="relative text-sc-cream hover:text-white p-2.5 rounded-xl hover:bg-white/10 transition">
       <i data-lucide="shopping-cart" class="w-6 h-6"></i>
       <span id="bar-count" class="absolute top-0.5 right-0.5 bg-sc-yellow text-sc-brown text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
@@ -205,7 +199,6 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- CART MODAL -->
 <div id="cart-backdrop" class="modal-bg fixed inset-0 z-50 bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="cart-drawer" class="modal-card fixed z-[60] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl flex flex-col max-h-[84vh]">
   <div class="flex items-center justify-between p-5 border-b border-stone-100">
@@ -216,7 +209,6 @@ tailwind.config = {
   <div class="p-5 border-t border-stone-100 bg-sc-cream rounded-b-3xl">
     <div class="space-y-1 text-sm mb-3">
       <div class="flex justify-between"><span class="text-stone-600">Subtotal</span><span id="cart-subtotal" class="font-semibold text-sc-brown">UGX 0</span></div>
-      <div class="flex justify-between text-green-700 hidden" id="discount-row"><span>Discount (<span id="discount-label"></span>)</span><span id="discount-amt">−UGX 0</span></div>
       <div class="flex justify-between text-base"><span class="text-stone-600">Total</span><span id="cart-total" class="disp text-lg font-extrabold text-sc-brown">UGX 0</span></div>
     </div>
     <div class="flex gap-2">
@@ -226,7 +218,6 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- DELIVERY / CHECKOUT -->
 <div id="delivery-backdrop" class="modal-bg fixed inset-0 z-[70] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="delivery-modal" class="modal-card fixed z-[80] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl max-h-[88vh] overflow-y-auto">
   <div class="p-6">
@@ -244,7 +235,6 @@ tailwind.config = {
         <button type="button" id="d-apply" class="px-4 py-3 rounded-xl bg-sc-brown text-sc-yellow text-sm font-semibold">Apply</button>
       </div>
       <p id="d-code-status" class="text-xs text-center"></p>
-
       <div id="redeem-box" class="hidden bg-sc-yellow/10 border border-sc-yellow/50 rounded-xl p-4">
         <label class="flex items-center justify-between cursor-pointer gap-3">
           <span class="text-sm font-semibold text-sc-brown flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 text-sc-orange"></i>Redeem my points</span>
@@ -256,22 +246,16 @@ tailwind.config = {
         <span>💡 Log in to earn &amp; redeem points on this order.</span>
         <button type="button" id="redeem-login" class="text-sc-orange font-semibold whitespace-nowrap">Log in</button>
       </div>
-
       <textarea id="d-notes" rows="2" placeholder="Notes (optional)" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></textarea>
-
       <div class="bg-sc-cream rounded-xl px-4 py-3 space-y-1 text-sm">
-        <div class="flex justify-between text-green-700 hidden" id="d-discount-row"><span>Discount</span><span id="d-discount-amt">−UGX 0</span></div>
-        <div class="flex justify-between text-sc-orange hidden" id="d-points-row"><span id="d-points-label">Points redeemed</span><span id="d-points-amt">−UGX 0</span></div>
         <div class="flex justify-between items-center"><span class="font-semibold text-stone-600">You pay</span><span id="d-total" class="disp text-xl font-extrabold text-sc-brown">UGX 0</span></div>
         <p id="d-earn-preview" class="text-[11px] text-stone-500 pt-1"></p>
       </div>
-
       <button type="submit" id="d-submit" class="w-full bg-sc-brown text-sc-yellow py-3.5 rounded-xl font-semibold hover:bg-sc-dark transition flex items-center justify-center gap-2"><i data-lucide="send" class="w-4 h-4"></i>Place Order</button>
     </form>
   </div>
 </div>
 
-<!-- AUTH MODAL -->
 <div id="auth-backdrop" class="modal-bg fixed inset-0 z-[85] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="auth-modal" class="modal-card fixed z-[90] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7 max-h-[88vh] overflow-y-auto">
   <div class="flex items-center justify-between mb-4">
@@ -293,7 +277,6 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- PASSWORD RESET -->
 <div id="reset-backdrop" class="modal-bg fixed inset-0 z-[92] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="reset-modal" class="modal-card fixed z-[93] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-7">
   <h2 class="disp text-xl font-extrabold text-sc-brown mb-4">Set a new password</h2>
@@ -305,7 +288,6 @@ tailwind.config = {
   </form>
 </div>
 
-<!-- MY REWARDS -->
 <div id="rew-backdrop" class="modal-bg fixed inset-0 z-[86] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="rew-modal" class="modal-card fixed z-[87] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-7 max-h-[88vh] overflow-y-auto">
   <div class="flex items-center justify-between mb-4">
@@ -317,15 +299,10 @@ tailwind.config = {
     <p id="rew-balance" class="disp text-4xl font-extrabold text-sc-orange mt-1">0</p>
     <p id="rew-value" class="text-xs text-stone-500 mt-1">Worth UGX 0 off your next order</p>
   </div>
-  <div class="grid grid-cols-2 gap-3 mb-4 text-center">
-    <div class="bg-sc-cream/60 rounded-xl p-3"><p id="rew-earn-rate" class="font-bold text-sc-brown text-sm">—</p><p class="text-[10px] text-stone-500 uppercase tracking-wide mt-0.5">Earn rate</p></div>
-    <div class="bg-sc-cream/60 rounded-xl p-3"><p id="rew-redeem-rate" class="font-bold text-sc-brown text-sm">—</p><p class="text-[10px] text-stone-500 uppercase tracking-wide mt-0.5">Point value</p></div>
-  </div>
   <p class="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-2">Recent activity</p>
   <div id="rew-history" class="space-y-2"></div>
 </div>
 
-<!-- SUCCESS -->
 <div id="success-backdrop" class="modal-bg fixed inset-0 z-[90] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="success-modal" class="modal-card fixed z-[95] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7 text-center">
   <div class="w-14 h-14 rounded-full bg-sc-yellow/20 text-sc-orange flex items-center justify-center mx-auto mb-3"><i data-lucide="check" class="w-7 h-7"></i></div>
@@ -341,7 +318,6 @@ tailwind.config = {
   <button id="success-done" class="w-full bg-stone-100 text-stone-700 py-3 rounded-xl font-semibold">Done</button>
 </div>
 
-<!-- TRACK -->
 <div id="track-backdrop" class="modal-bg fixed inset-0 z-[90] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="track-modal" class="modal-card fixed z-[95] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7">
   <div class="flex items-center justify-between mb-4">
@@ -375,17 +351,14 @@ tailwind.config = {
 const SUPABASE_URL = 'https://jvcxgnypznyhkbcshxes.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2Y3hnbnlwem55aGtiY3NoeGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NDg4MzUsImV4cCI6MjEwMjEyNDgzNX0.ki8oAuaDYyEx8UpVWzXGDdruYOIfRLqP9SAqUlhVq9w';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let WHATSAPP = '256764256966'; // default — overridden live from Settings
+let WHATSAPP = '256764256966';
 const $ = id => document.getElementById(id);
-const SESSION_MAX_DAYS = 7;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-let MENU = [], byId = {}, cart = {}, user = null, profile = null, appliedDiscount = null, redeemOn = false;
-let reward = { earn_rate: 1, redeem_value: 100 };
+let MENU = [], byId = {}, cart = {}, user = null, profile = null, redeemOn = false;
 
 function showToast(msg, type = 'success') {
-  const wrap = $('toast-wrap');
-  const t = document.createElement('div');
+  const wrap = $('toast-wrap'); const t = document.createElement('div');
   const color = type === 'success' ? 'bg-sc-brown' : type === 'error' ? 'bg-red-600' : 'bg-stone-700';
   t.className = 'toast ' + color + ' text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2';
   t.innerHTML = '<i data-lucide="' + (type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info') + '" class="w-4 h-4 flex-shrink-0"></i><span>' + esc(msg) + '</span>';
@@ -405,18 +378,10 @@ async function loadContent() {
   if (m.hours_weekday) $('f-hours-weekday').textContent = m.hours_weekday;
   if (m.hours_sunday) $('f-hours-sunday').textContent = m.hours_sunday;
   if (m.address) $('f-address').textContent = m.address;
-  const r = await db.from('reward_settings').select('*');
-  (r.data || []).forEach(x => { reward[x.key] = Number(x.value) || 0; });
-}
-
-function menuSkeleton() {
-  let c = '';
-  for (let i = 0; i < 6; i++) c += '<div class="rounded-2xl bg-white border border-[#EC6426]/10 shadow-sm p-5"><div class="skeleton h-5 w-3/4 mb-3"></div><div class="skeleton h-3 w-full mb-2"></div><div class="skeleton h-3 w-2/3 mb-4"></div><div class="flex justify-between items-center mt-4"><div class="skeleton h-5 w-20"></div><div class="skeleton h-8 w-8 rounded-full"></div></div></div>';
-  return '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">' + c + '</div>';
 }
 
 async function loadMenu() {
-  $('menu').innerHTML = menuSkeleton();
+  $('menu').innerHTML = '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">' + Array(6).fill('<div class="rounded-2xl bg-white border border-[#EC6426]/10 p-5"><div class="skeleton h-5 w-3/4 mb-3"></div><div class="skeleton h-3 w-full mb-2"></div><div class="skeleton h-3 w-2/3 mb-4"></div></div>').join('') + '</div>';
   const c = await db.from('menu_categories').select('*').order('display_order');
   const i = await db.from('menu_items').select('*').eq('is_available', true).order('display_order');
   MENU = (c.data || []).map(ct => ({
@@ -445,8 +410,7 @@ function render() {
         '<div class="flex flex-col flex-1 p-5">' +
           '<div class="flex items-start justify-between gap-2 mb-1"><h3 class="font-semibold text-sc-brown leading-snug">' + esc(item.name) + '</h3>' + badgeHtml(item.b) + '</div>' +
           ((item.t && item.t.length) ? '<div class="flex flex-wrap gap-1.5 mb-1">' + tagHtml(item.t) + '</div>' : '') +
-          (item.note ? '<button data-info="' + item.id + '" class="self-start flex items-center gap-1 text-[11px] font-semibold text-sc-orange hover:underline mt-0.5"><span class="info-label">Details</span><i data-lucide="chevron-down" class="w-3.5 h-3.5 info-chev"></i></button>' +
-          '<div data-infobox="' + item.id + '" class="hidden mt-2 text-xs text-stone-600 leading-relaxed bg-sc-cream/70 rounded-xl px-3 py-2.5 border border-[#EC6426]/10">' + esc(item.note) + '</div>' : '') +
+          (item.note ? '<button data-info="' + item.id + '" class="self-start flex items-center gap-1 text-[11px] font-semibold text-sc-orange hover:underline mt-0.5"><span class="info-label">Details</span><i data-lucide="chevron-down" class="w-3.5 h-3.5 info-chev"></i></button><div data-infobox="' + item.id + '" class="hidden mt-2 text-xs text-stone-600 leading-relaxed bg-sc-cream/70 rounded-xl px-3 py-2.5 border border-[#EC6426]/10">' + esc(item.note) + '</div>' : '') +
           '<div class="flex-1"></div>' +
           '<div class="flex items-center justify-between mt-3 pt-3 border-t border-[#EC6426]/10"><span class="font-bold text-sc-brown">UGX ' + item.price.toLocaleString() + '</span><div data-ctl="' + item.id + '">' + ctlHtml(item.id) + '</div></div>' +
         '</div>' +
@@ -472,12 +436,10 @@ function toggleInfo(id) {
   }
 }
 
-let io;
 function observe() {
   const els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('on')); return; }
-  io && io.disconnect();
-  io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { threshold: 0, rootMargin: '0px 0px -8% 0px' });
   els.forEach(el => io.observe(el));
   setTimeout(() => els.forEach(el => el.classList.add('on')), 1500);
 }
@@ -498,7 +460,6 @@ function setQty(id, d) {
 
 function clearCart() {
   for (const k in cart) delete cart[k];
-  appliedDiscount = null; redeemOn = false;
   $('d-code').value = ''; $('d-code-status').textContent = ''; $('redeem-toggle').checked = false;
   document.querySelectorAll('[data-ctl]').forEach(el => { el.innerHTML = ctlHtml(el.dataset.ctl); });
   updateBar(); renderCartList();
@@ -506,64 +467,16 @@ function clearCart() {
 }
 
 function subtotal() { let t = 0; for (const id in cart) t += cart[id] * byId[id].price; return t; }
-function discountAmount(sub) { if (!appliedDiscount) return 0; return appliedDiscount.type === 'percent' ? Math.round(sub * appliedDiscount.value / 100) : Math.min(appliedDiscount.value, sub); }
-
-function redeemablePoints(sub, disc) {
-  if (!user || !profile || !reward.redeem_value) return 0;
-  const balance = profile.points || 0;
-  const remaining = Math.max(sub - disc, 0);
-  const neededForFull = Math.ceil(remaining / reward.redeem_value);
-  return Math.min(balance, neededForFull);
-}
-function redeemCalc() {
-  const sub = subtotal(); const disc = discountAmount(sub);
-  const pts = redeemOn ? redeemablePoints(sub, disc) : 0;
-  const val = Math.min(pts * (reward.redeem_value || 0), sub - disc);
-  const total = sub - disc - val;
-  const earn = user ? Math.floor(total / 1000) * (reward.earn_rate || 0) : 0;
-  return { sub, disc, pts, val, total, earn };
-}
 
 function updateBar() {
   const n = Object.keys(cart).reduce((s, id) => s + cart[id], 0);
-  const { sub, disc } = redeemCalc();
-  $('bar-summary').textContent = n + ' items · UGX ' + (sub - disc).toLocaleString();
+  const sub = subtotal();
+  $('bar-summary').textContent = n + ' items · UGX ' + sub.toLocaleString();
   $('bar-count').textContent = n;
   const tc = $('top-count'); tc.textContent = n; tc.classList.toggle('hidden', n === 0); tc.classList.toggle('flex', n > 0);
   $('cart-subtotal').textContent = 'UGX ' + sub.toLocaleString();
-  $('cart-total').textContent = 'UGX ' + (sub - disc).toLocaleString();
-  $('discount-row').classList.toggle('hidden', !appliedDiscount);
-  if (appliedDiscount) { $('discount-label').textContent = appliedDiscount.code; $('discount-amt').textContent = '−UGX ' + disc.toLocaleString(); }
+  $('cart-total').textContent = 'UGX ' + sub.toLocaleString();
   $('order-bar').classList.toggle('hide', n === 0);
-}
-
-function updateCheckoutTotals() {
-  const { disc, pts, val, total, earn } = redeemCalc();
-  $('d-discount-row').classList.toggle('hidden', disc === 0);
-  $('d-discount-amt').textContent = '−UGX ' + disc.toLocaleString();
-  $('d-points-row').classList.toggle('hidden', pts === 0);
-  $('d-points-label').textContent = 'Points redeemed (−' + pts + ' pts)';
-  $('d-points-amt').textContent = '−UGX ' + val.toLocaleString();
-  $('d-total').textContent = 'UGX ' + total.toLocaleString();
-  $('d-earn-preview').textContent = user ? ('This order earns you +' + earn + ' points' + (redeemOn && pts > 0 ? ' (after redemption)' : '')) : '';
-  updateRedeemUI();
-}
-
-function updateRedeemUI() {
-  const box = $('redeem-box'), nudge = $('redeem-nudge');
-  if (user && profile && (profile.points || 0) > 0) {
-    box.classList.remove('hidden'); nudge.classList.add('hidden');
-    const { sub, disc } = redeemCalc();
-    const pts = redeemablePoints(sub, disc);
-    const val = Math.min(pts * (reward.redeem_value || 0), sub - disc);
-    $('redeem-info').textContent = 'You have ' + (profile.points || 0) + ' pts. ' +
-      (pts > 0 ? 'Using ' + pts + ' pts takes −UGX ' + val.toLocaleString() + ' off this order.' : 'Not enough bill left to redeem on this order.');
-    $('redeem-toggle').checked = redeemOn && pts > 0;
-  } else if (!user) {
-    box.classList.add('hidden'); nudge.classList.remove('hidden');
-  } else {
-    box.classList.add('hidden'); nudge.classList.add('hidden');
-  }
 }
 
 function renderCartList() {
@@ -579,18 +492,6 @@ function renderCartList() {
 function openModal(bg, id) { $(bg).classList.add('open'); $(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModal(bg, id) { $(bg).classList.remove('open'); $(id).classList.remove('open'); document.body.style.overflow = ''; }
 
-$('d-apply').addEventListener('click', async () => {
-  const code = $('d-code').value.trim().toUpperCase(); const st = $('d-code-status');
-  if (!code) return;
-  const { data } = await db.from('discount_codes').select('*').eq('code', code).eq('active', true).maybeSingle();
-  if (!data) { st.textContent = 'Invalid or expired code.'; st.className = 'text-xs text-center text-red-600'; appliedDiscount = null; }
-  else { appliedDiscount = data; st.textContent = '✓ ' + code + ' applied!'; st.className = 'text-xs text-center text-green-700'; }
-  updateBar(); updateCheckoutTotals();
-});
-$('redeem-toggle').addEventListener('change', e => { redeemOn = e.target.checked; updateCheckoutTotals(); });
-$('redeem-login').addEventListener('click', () => { closeModal('delivery-backdrop', 'delivery-modal'); openAuth('login'); });
-
-const genCode = () => Array.from({ length: 8 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
 const waPhone = p => { let d = (p || '').replace(/\D/g, ''); if (!d) return ''; if (d.startsWith('0')) d = '256' + d.slice(1); else if (!d.startsWith('256')) d = '256' + d; return d; };
 
 function openDelivery() {
@@ -599,43 +500,37 @@ function openDelivery() {
     $('d-phone').value = profile.phone_number || '';
     $('d-email').value = profile.email || user?.email || '';
   }
-  redeemOn = false; $('redeem-toggle').checked = false;
-  updateCheckoutTotals();
+  $('redeem-toggle').checked = false;
+  const sub = subtotal();
+  $('d-total').textContent = 'UGX ' + sub.toLocaleString();
+  $('d-earn-preview').textContent = user ? 'This order earns you points (calculated server-side)' : 'Log in to earn rewards on this order.';
   openModal('delivery-backdrop', 'delivery-modal');
 }
 
+// SERVER-SIDE order placement — math and totals computed in Postgres
 async function placeOrder(e) {
   e.preventDefault();
   const name = $('d-name').value.trim(), phone = waPhone($('d-phone').value), email = $('d-email').value.trim(), address = $('d-address').value.trim(), notes = $('d-notes').value.trim();
   const n = Object.keys(cart).reduce((s, id) => s + cart[id], 0);
   if (!n) { showToast('Your cart is empty', 'error'); return; }
-  const code = genCode(); const btn = $('d-submit'); btn.disabled = true; btn.textContent = 'Placing…';
-  const { disc, pts, val, total, earn } = redeemCalc();
-  const pointsEarned = earn;
-  const pointsRedeemed = pts;
-  try {
-    const payload = { order_code: code, customer_id: user ? user.id : null, customer_name: name, customer_phone: phone, customer_email: email || null, delivery_type: 'delivery', delivery_address: address, total_amount: total, notes: notes, status: 'pending', discount_code: appliedDiscount ? appliedDiscount.code : null, discount_amount: disc, points_earned: pointsEarned, points_redeemed: pointsRedeemed };
-    const { data: od, error: oe } = await db.from('orders').insert(payload).select().single();
-    if (oe) throw oe;
-    const { error: ie } = await db.from('order_items').insert(Object.keys(cart).map(id => ({ order_id: od.id, menu_item_id: id, item_name_snapshot: byId[id].name, item_price_snapshot: byId[id].price, quantity: cart[id], subtotal: cart[id] * byId[id].price })));
-    if (ie) throw ie;
-    if (user) {
-      const newBalance = Math.max((profile.points || 0) - pointsRedeemed + pointsEarned, 0);
-      await db.from('customers').update({ points: newBalance }).eq('id', user.id);
-      const log = [];
-      if (pointsRedeemed > 0) log.push({ customer_id: user.id, order_code: code, type: 'redeem', points: -pointsRedeemed, note: 'Redeemed at checkout' });
-      if (pointsEarned > 0) log.push({ customer_id: user.id, order_code: code, type: 'earn', points: pointsEarned, note: 'Earned on order' });
-      if (log.length) await db.from('points_log').insert(log);
-    }
-  } catch (err) {
-    showToast('Order could not be placed. Please try again.', 'error');
-    btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i>Place Order'; lucide.createIcons();
-    return;
-  }
+  const btn = $('d-submit'); btn.disabled = true; btn.textContent = 'Placing…';
+  const { data, error } = await db.rpc('place_order', {
+    p_customer_name: name,
+    p_customer_phone: phone,
+    p_customer_address: address,
+    p_items: Object.keys(cart).map(id => ({ menu_item_id: id, quantity: cart[id] })),
+    p_customer_email: email || null,
+    p_notes: notes || null,
+    p_discount_code: $('d-code').value.trim() || null,
+    p_redeem: redeemOn
+  });
+  btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i>Place Order'; lucide.createIcons();
+  if (error) { showToast(error.message || 'Order could not be placed.', 'error'); return; }
+  const code = data.order_code;
   let msg = 'Hello Street Chefs! Order ' + code + ':\n';
   for (const id in cart) msg += cart[id] + 'x ' + byId[id].name + '\n';
-  msg += 'Total: UGX ' + total.toLocaleString();
-  if (pointsRedeemed > 0) msg += ' (paid with ' + pointsRedeemed + ' pts)';
+  msg += 'Total: UGX ' + Number(data.total).toLocaleString();
+  if (data.points_redeemed > 0) msg += ' (paid with ' + data.points_redeemed + ' pts)';
   msg += '\nName: ' + name + '\nPhone: +' + phone + '\nAddress: ' + address;
   window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
   clearCart();
@@ -643,35 +538,28 @@ async function placeOrder(e) {
   $('success-code').textContent = code;
   $('whatsapp-loc-btn').href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Hi Street Chefs! My order #' + code + ' is placed. Sharing my delivery location now 📍');
   const parts = [];
-  if (pointsEarned > 0) parts.push('+' + pointsEarned + ' points earned!');
-  if (pointsRedeemed > 0) parts.push(pointsRedeemed + ' pts redeemed (−UGX ' + val.toLocaleString() + ')');
+  if (data.points_earned > 0) parts.push('+' + data.points_earned + ' points earned!');
+  if (data.points_redeemed > 0) parts.push(data.points_redeemed + ' pts redeemed');
   if (parts.length) { $('success-points').textContent = parts.join(' · '); $('success-points').classList.remove('hidden'); }
   else $('success-points').classList.add('hidden');
   openModal('success-backdrop', 'success-modal');
-  btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i>Place Order'; lucide.createIcons();
   if (user) await refreshUser();
 }
 
 async function openRewards() {
   if (!user) return;
   $('rew-balance').textContent = (profile?.points || 0).toLocaleString();
-  $('rew-value').textContent = 'Worth UGX ' + ((profile?.points || 0) * (reward.redeem_value || 0)).toLocaleString() + ' off your next order';
-  $('rew-earn-rate').textContent = reward.earn_rate + ' pt / UGX 1,000';
-  $('rew-redeem-rate').textContent = 'UGX ' + (reward.redeem_value || 0).toLocaleString() + ' / pt';
+  $('rew-value').textContent = 'Worth UGX ' + ((profile?.points || 0) * 100).toLocaleString() + ' off your next order';
   $('rew-history').innerHTML = '<div class="skeleton h-10 w-full"></div>';
   openModal('rew-backdrop', 'rew-modal');
   const { data } = await db.from('points_log').select('*').eq('customer_id', user.id).order('created_at', { ascending: false }).limit(10);
   const box = $('rew-history');
-  if (!data || !data.length) { box.innerHTML = '<p class="text-xs text-stone-400 text-center py-4">No activity yet — your first order starts the journey!</p>'; return; }
+  if (!data || !data.length) { box.innerHTML = '<p class="text-xs text-stone-400 text-center py-4">No activity yet.</p>'; return; }
   box.innerHTML = data.map(l => {
     const icon = l.type === 'earn' ? 'arrow-up-circle' : l.type === 'redeem' ? 'arrow-down-circle' : 'settings';
     const color = l.points >= 0 ? 'text-green-600' : 'text-sc-orange';
     const date = new Date(l.created_at).toLocaleDateString('en-UG', { month: 'short', day: 'numeric' });
-    return '<div class="flex items-center gap-3 bg-sc-cream/50 rounded-xl px-3 py-2.5">' +
-      '<i data-lucide="' + icon + '" class="w-4 h-4 ' + color + ' flex-shrink-0"></i>' +
-      '<div class="flex-1 min-w-0"><p class="text-xs font-semibold text-sc-brown truncate">' + esc(l.note || l.type) + '</p>' +
-      '<p class="text-[10px] text-stone-400">' + date + (l.order_code ? ' · #' + esc(l.order_code) : '') + '</p></div>' +
-      '<span class="text-sm font-bold ' + color + '">' + (l.points > 0 ? '+' : '') + l.points + '</span></div>';
+    return '<div class="flex items-center gap-3 bg-sc-cream/50 rounded-xl px-3 py-2.5"><i data-lucide="' + icon + '" class="w-4 h-4 ' + color + ' flex-shrink-0"></i><div class="flex-1 min-w-0"><p class="text-xs font-semibold text-sc-brown truncate">' + esc(l.note || l.type) + '</p><p class="text-[10px] text-stone-400">' + date + '</p></div><span class="text-sm font-bold ' + color + '">' + (l.points > 0 ? '+' : '') + l.points + '</span></div>';
   }).join('');
   lucide.createIcons();
 }
@@ -688,7 +576,7 @@ $('review-form').addEventListener('submit', async e => {
   if (!selectedRating) { showToast('Please select a star rating', 'error'); return; }
   const name = $('rev-name').value.trim(), comment = $('rev-comment').value.trim();
   const { error } = await db.from('reviews').insert({ customer_name: name, rating: selectedRating, comment });
-  if (error) { showToast('Could not submit review. Please try again.', 'error'); return; }
+  if (error) { showToast('Could not submit review.', 'error'); return; }
   showToast('Thanks! Your review is pending approval.');
   $('review-form').reset(); selectedRating = 0;
   document.querySelectorAll('[data-star]').forEach(s => { s.classList.remove('text-sc-orange'); s.classList.add('text-stone-300'); });
@@ -728,23 +616,18 @@ $('auth-form').addEventListener('submit', async e => {
     const name = $('a-name').value.trim(), phone = $('a-phone').value.trim();
     const { data, error } = await db.auth.signUp({ email, password, options: { data: { full_name: name, phone_number: phone } } });
     if (error) { showAuthError(error.message); return; }
-    if (data.session) { localStorage.setItem('sc_login_at', Date.now().toString()); await refreshUser(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome to Street Chefs!'); }
-    else {
-      const si = await db.auth.signInWithPassword({ email, password });
-      if (si.data && si.data.session) { localStorage.setItem('sc_login_at', Date.now().toString()); await refreshUser(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome to Street Chefs!'); }
-      else { $('auth-info').textContent = 'Account created! Check your email to confirm, then log in.'; $('auth-info').classList.remove('hidden'); setAuthMode('login'); }
-    }
+    if (data.session) { await refreshUser(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome to Street Chefs!'); }
+    else { $('auth-info').textContent = 'Account created! Check your email to confirm.'; $('auth-info').classList.remove('hidden'); setAuthMode('login'); }
   } else {
     const { error } = await db.auth.signInWithPassword({ email, password });
     if (error) { showAuthError(error.message); return; }
-    localStorage.setItem('sc_login_at', Date.now().toString()); await refreshUser(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome back!');
+    await refreshUser(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome back!');
   }
 });
 
 async function doLogout() {
   await db.auth.signOut(); user = null; profile = null;
-  localStorage.removeItem('sc_login_at'); updateAccountUI();
-  showToast('Logged out', 'info');
+  updateAccountUI(); showToast('Logged out', 'info');
 }
 
 async function refreshUser() {
@@ -755,8 +638,7 @@ async function refreshUser() {
     if (!data) {
       const name = user.user_metadata?.full_name || user.email;
       const phone = user.user_metadata?.phone_number || '';
-      const { error } = await db.from('customers').insert({ id: user.id, full_name: name, email: user.email, phone_number: phone });
-      if (error) console.error('customer profile insert failed:', error.message);
+      await db.from('customers').insert({ id: user.id, full_name: name, email: user.email, phone_number: phone });
       ({ data } = await db.from('customers').select('*').eq('id', user.id).maybeSingle());
     }
     profile = data || { full_name: user.user_metadata?.full_name || user.email, points: 0 };
@@ -778,19 +660,12 @@ function updateAccountUI() {
   $('acct-points').textContent = pts + ' pts'; $('m-acct-points').textContent = pts + ' pts';
 }
 
-async function enforceSessionExpiry() {
-  const t = localStorage.getItem('sc_login_at');
-  if (t && (Date.now() - parseInt(t)) > SESSION_MAX_DAYS * 24 * 60 * 60 * 1000) {
-    await db.auth.signOut(); localStorage.removeItem('sc_login_at');
-  }
-}
-
 $('auth-forgot').addEventListener('click', async () => {
   const email = $('a-email').value.trim();
-  if (!email) { showAuthError('Type your email first, then tap "Forgot password?".'); return; }
+  if (!email) { showAuthError('Type your email first.'); return; }
   const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
   if (error) showAuthError(error.message);
-  else { $('auth-info').textContent = 'Reset link sent. Check your email, then set a new password.'; $('auth-info').classList.remove('hidden'); }
+  else { $('auth-info').textContent = 'Reset link sent. Check your email.'; $('auth-info').classList.remove('hidden'); }
 });
 
 $('reset-form').addEventListener('submit', async e => {
@@ -801,7 +676,6 @@ $('reset-form').addEventListener('submit', async e => {
   const { error } = await db.auth.updateUser({ password: p });
   if (error) { $('reset-error').textContent = error.message; $('reset-error').classList.remove('hidden'); return; }
   closeModal('reset-backdrop', 'reset-modal'); openAuth('login');
-  $('auth-info').textContent = 'Password updated. You can log in now.'; $('auth-info').classList.remove('hidden');
 });
 
 function maybeOpenReset() { if (location.hash.includes('recovery') || location.hash === '#reset') openModal('reset-backdrop', 'reset-modal'); }
@@ -845,7 +719,7 @@ async function trackByCode(code) {
       }, 5000);
     }
   } catch (err) {
-    $('track-error').textContent = 'Could not look up that order. Please try again.';
+    $('track-error').textContent = 'Could not look up that order.';
     $('track-error').classList.remove('hidden');
   } finally { $('track-go').textContent = 'Track'; }
 }
@@ -875,7 +749,6 @@ $('nav-backdrop').addEventListener('click', closeNav);
 $('nav-drawer').addEventListener('click', e => { if (e.target.closest('[data-page]')) closeNav(); });
 $('nav-track').addEventListener('click', () => { closeNav(); openModal('track-backdrop', 'track-modal'); });
 $('top-track').addEventListener('click', () => openModal('track-backdrop', 'track-modal'));
-
 $('login-open').addEventListener('click', () => openAuth('login'));
 $('signup-open').addEventListener('click', () => openAuth('signup'));
 $('m-login-open').addEventListener('click', () => { closeNav(); openAuth('login'); });
@@ -885,7 +758,6 @@ $('auth-close').addEventListener('click', () => closeModal('auth-backdrop', 'aut
 $('auth-backdrop').addEventListener('click', () => closeModal('auth-backdrop', 'auth-modal'));
 $('logout').addEventListener('click', doLogout);
 $('m-logout').addEventListener('click', () => { closeNav(); doLogout(); });
-
 $('acct-points-chip').addEventListener('click', openRewards);
 $('m-acct-points-chip').addEventListener('click', () => { closeNav(); openRewards(); });
 $('rew-close').addEventListener('click', () => closeModal('rew-backdrop', 'rew-modal'));
@@ -917,23 +789,21 @@ $('success-done').addEventListener('click', () => closeModal('success-backdrop',
 $('copy-code').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText($('success-code').textContent); showToast('Code copied'); } catch (e) {}
 });
-
+$('redeem-login').addEventListener('click', () => { closeModal('delivery-backdrop', 'delivery-modal'); openAuth('login'); });
+$('redeem-toggle').addEventListener('change', e => { redeemOn = e.target.checked; });
 $('track-go').addEventListener('click', () => trackByCode($('track-code').value));
 $('track-code').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); trackByCode($('track-code').value); } });
 $('track-close').addEventListener('click', () => { stopTracking(); closeModal('track-backdrop', 'track-modal'); });
 $('track-backdrop').addEventListener('click', () => { stopTracking(); closeModal('track-backdrop', 'track-modal'); });
-
 $('index').addEventListener('click', e => {
   const b = e.target.closest('[data-goto]'); if (!b) return;
   const s = document.querySelectorAll('.menu-section')[+b.dataset.goto];
   s && s.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-
 ['q', 'q-m'].forEach(id => {
   const el = $(id);
   el && el.addEventListener('input', e => { filter(e.target.value); const o = $(id === 'q' ? 'q-m' : 'q'); if (o) o.value = e.target.value; });
 });
-
 document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); showPage(b.dataset.page); }));
 window.addEventListener('hashchange', () => {
   if (location.hash.includes('recovery') || location.hash === '#reset') maybeOpenReset();
@@ -941,7 +811,6 @@ window.addEventListener('hashchange', () => {
 });
 
 (async () => {
-  await enforceSessionExpiry();
   await refreshUser();
   await loadContent();
   showPage(location.hash === '#reviews' ? 'reviews' : 'home');
