@@ -4,56 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Street Chefs — Food & Drinks · Kampala</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍢</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23632713'/><path d='M25 37A5 5 0 0 0 30 32c0-2.76-1-4-2-6-2.144-4.286-.448-8.108 4-12 1 5 4 9.8 8 13 4 3.2 6 7 6 11a14 14 0 1 1-28 0c0-2.306.866-4.588 2-6a5 5 0 0 0 5 5z' fill='none' stroke='%23F8A91F' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-tailwind.config = {
-  theme: { extend: {
-    colors: { sc: { orange:'#EC6426', yellow:'#F8A91F', cream:'#FDE3CF', brown:'#632713', dark:'#4a1d0e' } },
-    fontFamily: { word:['Bungee','cursive'], display:['"Baloo 2"','cursive'], body:['Inter','sans-serif'] }
-  }}
-};
+tailwind.config={theme:{extend:{colors:{sc:{orange:'#EC6426',yellow:'#F8A91F',cream:'#FDE3CF',brown:'#632713',dark:'#4a1d0e'}},fontFamily:{word:['Bungee'],display:['"Baloo 2"'],body:['Inter']}}}};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Baloo+2:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing:border-box; }
-  html, body { width:100%; max-width:100%; overflow-x:hidden; }
-  img, video { max-width:100%; }
-  body { font-family:'Inter',sans-serif; background:#FDE3CF; -webkit-tap-highlight-color:transparent; }
-  .disp { font-family:'Baloo 2',cursive; }
-  .word { font-family:'Bungee',cursive; letter-spacing:.01em; }
-  [data-lucide] { stroke-width:2; }
-  .menu-card { transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s, border-color .25s; }
-  .menu-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -20px rgba(99,39,19,.4); border-color: rgba(236,100,38,.55); }
-  .reveal { opacity:0; transform:translateY(16px); transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1); }
-  .reveal.on { opacity:1; transform:none; }
-  .addbtn { width:2.1rem; height:2.1rem; border-radius:9999px; background:#EC6426; color:#fff; font-size:1.15rem; line-height:1; text-align:center; transition: background .2s, transform .15s; flex-shrink:0; }
-  .addbtn:hover { background:#d4551d; } .addbtn:active { transform:scale(.9); }
-  .stepbtn { width:1.9rem; height:1.9rem; border-radius:9999px; border:1px solid rgba(236,100,38,.4); color:#EC6426; display:flex; align-items:center; justify-content:center; transition:all .2s; flex-shrink:0; }
-  .stepbtn:hover { background:#EC6426; color:#fff; }
-  #order-bar { transition: transform .4s cubic-bezier(.16,1,.3,1), opacity .3s; }
-  #order-bar.hide { transform: translate(-50%,120%); opacity:0; }
-  .chip { transition:all .2s; } .chip:hover { background:#632713; color:#F8A91F; }
-  .modal-bg { opacity:0; pointer-events:none; transition:opacity .3s; } .modal-bg.open { opacity:1; pointer-events:auto; }
-  .modal-card { opacity:0; transform:translate(-50%,-50%) scale(.94); pointer-events:none; transition:opacity .3s, transform .3s cubic-bezier(.16,1,.3,1); }
-  .modal-card.open { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
-  .star-btn { transition:color .2s, transform .1s; } .star-btn:hover { transform:scale(1.2); }
-  .page-btn.active { color:#EC6426; }
-  .avatar { width:2.2rem; height:2.2rem; border-radius:9999px; background:#632713; color:#F8A91F; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; }
-  .skeleton { background:linear-gradient(90deg,#f1e7d8 25%,#faf3e8 50%,#f1e7d8 75%); background-size:200% 100%; animation:shimmer 1.2s infinite; border-radius:.6rem; }
-  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-  .track-dot { width:14px; height:14px; border-radius:9999px; background:#e7ddd2; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.15); transition:background .4s; }
-  .track-dot.on { background:#EC6426; }
-  .whatsapp-loc-btn { display:inline-flex; align-items:center; gap:8px; background:#25D366; color:#fff; font-weight:600; padding:14px 24px; border-radius:12px; text-decoration:none; font-size:15px; transition:all .2s; width:100%; justify-content:center; }
-  .whatsapp-loc-btn:hover { background:#1ebe5b; transform:translateY(-1px); }
-  .pts-chip { cursor:pointer; transition: background .2s; } .pts-chip:hover { background: rgba(236,100,38,.15); }
-  .info-chev { transition: transform .25s; }
-  #toast-wrap { pointer-events:none; }
-  .toast { animation: toastIn .35s cubic-bezier(.16,1,.3,1) both; }
-  @keyframes toastIn { from { opacity:0; transform:translateY(12px) scale(.95); } to { opacity:1; transform:none; } }
-  @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } .reveal { opacity:1; transform:none; } }
+  body{font-family:'Inter',sans-serif;background:#FDE3CF;-webkit-tap-highlight-color:transparent;}
+  .disp{font-family:'Baloo 2',cursive;}.word{font-family:'Bungee',cursive;letter-spacing:.01em;}
+  .menu-card{transition:transform .25s,box-shadow .25s,border-color .25s;}
+  .menu-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px -20px rgba(99,39,19,.4);border-color:rgba(236,100,38,.55);}
+  .addbtn{width:2.1rem;height:2.1rem;border-radius:9999px;background:#EC6426;color:#fff;font-size:1.15rem;line-height:1;text-align:center;transition:all .2s;flex-shrink:0;}
+  .addbtn:hover{background:#d4551d;}.addbtn:active{transform:scale(.9);}
+  .stepbtn{width:1.9rem;height:1.9rem;border-radius:9999px;border:1px solid rgba(236,100,38,.4);color:#EC6426;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+  .stepbtn:hover{background:#EC6426;color:#fff;}
+  #order-bar{transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .3s;}
+  #order-bar.hide{transform:translate(-50%,120%);opacity:0;}
+  .chip{transition:all .2s;}.chip:hover{background:#632713;color:#F8A91F;}
+  .modal-bg{opacity:0;pointer-events:none;transition:opacity .3s;}.modal-bg.open{opacity:1;pointer-events:auto;}
+  .modal-card{opacity:0;transform:translate(-50%,-50%) scale(.94);pointer-events:none;transition:opacity .3s,transform .3s;}.modal-card.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto;}
+  .star-btn{transition:color .2s,transform .1s;}.star-btn:hover{transform:scale(1.2);}
+  .page-btn.active{color:#EC6426;}
+  .avatar{width:2.2rem;height:2.2rem;border-radius:9999px;background:#632713;color:#F8A91F;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;}
+  .skeleton{background:linear-gradient(90deg,#f1e7d8 25%,#faf3e8 50%,#f1e7d8 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:.6rem;}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .track-dot{width:14px;height:14px;border-radius:9999px;background:#e7ddd2;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:background .4s;}
+  .track-dot.on{background:#EC6426;}
+  .whatsapp-loc-btn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;font-weight:600;padding:14px 24px;border-radius:12px;text-decoration:none;font-size:15px;transition:all .2s;width:100%;justify-content:center;}
+  .whatsapp-loc-btn:hover{background:#1ebe5b;transform:translateY(-1px);}
+  .pts-chip{cursor:pointer;transition:background .2s;}.pts-chip:hover{background:rgba(236,100,38,.15);}
+  .info-chev{transition:transform .25s;}
+  #toast-wrap{pointer-events:none;}
+  .toast{animation:toastIn .35s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.95);}to{opacity:1;transform:none;}}
 </style>
 </head>
 <body class="text-stone-800">
@@ -62,7 +48,7 @@ tailwind.config = {
 
 <header class="sticky top-0 z-40 bg-[#FDE3CF]/90 backdrop-blur border-b border-[#EC6426]/20">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-2 sm:gap-3">
-    <button id="nav-open" class="md:hidden text-sc-brown hover:text-sc-orange p-2 rounded-xl hover:bg-white transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
+    <button id="nav-open" class="md:hidden text-sc-brown p-2 rounded-xl hover:bg-white"><i data-lucide="menu" class="w-6 h-6"></i></button>
     <a href="#home" data-page="home" class="w-9 h-9 rounded-xl bg-sc-brown text-sc-yellow flex items-center justify-center flex-shrink-0"><i data-lucide="flame" class="w-5 h-5"></i></a>
     <div class="min-w-0">
       <p class="word text-sc-brown leading-none text-sm sm:text-base">Street Chefs</p>
@@ -79,24 +65,24 @@ tailwind.config = {
       <i data-lucide="search" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"></i>
       <input id="q" type="text" placeholder="Search…" class="w-full bg-white border border-[#EC6426]/25 rounded-xl text-sm py-2 pl-8 pr-3 outline-none focus:border-sc-orange">
     </div>
-    <div class="flex items-center gap-1 sm:gap-2">
+    <div class="hidden sm:flex items-center gap-2">
       <div id="acct-logged-out" class="flex items-center gap-1">
-        <button id="login-open" class="text-[11px] sm:text-sm font-semibold text-sc-brown hover:text-sc-orange px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl hover:bg-white transition">Login</button>
-        <button id="signup-open" class="text-[11px] sm:text-sm font-semibold bg-sc-orange text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl hover:bg-[#d4551d] transition">Sign Up</button>
+        <button id="login-open" class="text-sm font-semibold text-sc-brown px-3 py-2 rounded-xl hover:bg-white">Login</button>
+        <button id="signup-open" class="text-sm font-semibold bg-sc-orange text-white px-3 py-2 rounded-xl hover:bg-[#d4551d]">Sign Up</button>
       </div>
       <div id="acct-logged-in" class="hidden items-center gap-2">
         <span id="avatar" class="avatar">S</span>
-        <div id="acct-points-chip" class="pts-chip hidden lg:flex items-center gap-1.5 rounded-xl px-2 py-1" title="My Rewards">
+        <div id="acct-points-chip" class="pts-chip hidden lg:flex items-center gap-1.5 rounded-xl px-2 py-1">
           <i data-lucide="gift" class="w-3.5 h-3.5 text-sc-orange"></i>
           <div class="leading-tight">
             <p id="acct-name" class="text-sm font-semibold text-sc-brown">—</p>
             <p id="acct-points" class="text-[10px] text-sc-orange font-bold">0 pts</p>
           </div>
         </div>
-        <button id="logout" class="text-stone-400 hover:text-red-600 p-2 rounded-xl hover:bg-white transition"><i data-lucide="log-out" class="w-4 h-4"></i></button>
+        <button id="logout" class="text-stone-400 hover:text-red-600 p-2 rounded-xl hover:bg-white"><i data-lucide="log-out" class="w-4 h-4"></i></button>
       </div>
     </div>
-    <button id="top-cart" class="relative text-sc-brown hover:text-sc-orange p-2 rounded-xl hover:bg-white transition">
+    <button id="top-cart" class="relative text-sc-brown p-2 rounded-xl hover:bg-white">
       <i data-lucide="shopping-cart" class="w-6 h-6"></i>
       <span id="top-count" class="absolute -top-0.5 -right-0.5 bg-sc-yellow text-sc-brown text-[10px] font-bold w-5 h-5 rounded-full items-center justify-center hidden">0</span>
     </button>
@@ -106,15 +92,12 @@ tailwind.config = {
 <div id="nav-backdrop" class="fixed inset-0 z-[45] bg-sc-brown/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity md:hidden"></div>
 <aside id="nav-drawer" class="fixed z-[50] top-0 left-0 h-full w-[80%] max-w-xs bg-[#FDE3CF] shadow-2xl p-5 flex flex-col gap-1 -translate-x-full transition-transform duration-300 md:hidden">
   <div class="flex items-center justify-between mb-4">
-    <div class="flex items-center gap-2">
-      <span class="w-9 h-9 rounded-xl bg-sc-brown text-sc-yellow flex items-center justify-center"><i data-lucide="flame" class="w-5 h-5"></i></span>
-      <p class="word text-sc-brown">Street Chefs</p>
-    </div>
+    <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-xl bg-sc-brown text-sc-yellow flex items-center justify-center"><i data-lucide="flame" class="w-5 h-5"></i></span><p class="word text-sc-brown">Street Chefs</p></div>
     <button id="nav-close" class="text-sc-brown p-2 rounded-xl hover:bg-white"><i data-lucide="x" class="w-5 h-5"></i></button>
   </div>
-  <button data-page="home" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-sc-brown hover:bg-white transition"><i data-lucide="utensils" class="w-4 h-4"></i>Menu</button>
-  <button data-page="reviews" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-sc-brown hover:bg-white transition"><i data-lucide="star" class="w-4 h-4"></i>Reviews</button>
-  <button id="nav-track" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-sc-brown hover:bg-white transition"><i data-lucide="package-search" class="w-4 h-4"></i>Track Order</button>
+  <button data-page="home" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-sc-brown hover:bg-white"><i data-lucide="utensils" class="w-4 h-4"></i>Menu</button>
+  <button data-page="reviews" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-sc-brown hover:bg-white"><i data-lucide="star" class="w-4 h-4"></i>Reviews</button>
+  <button id="nav-track" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-sc-brown hover:bg-white"><i data-lucide="package-search" class="w-4 h-4"></i>Track Order</button>
   <p id="m-announcement" class="hidden text-xs font-semibold text-sc-brown bg-sc-yellow/40 px-3 py-2 rounded-xl mt-2"></p>
   <div class="mt-auto pt-4 border-t border-[#EC6426]/20">
     <div id="m-logged-out" class="flex gap-2">
@@ -125,10 +108,7 @@ tailwind.config = {
       <span id="m-avatar" class="avatar">S</span>
       <div id="m-acct-points-chip" class="pts-chip flex-1 flex items-center gap-2 rounded-xl px-2 py-1">
         <i data-lucide="gift" class="w-4 h-4 text-sc-orange"></i>
-        <div class="flex-1 leading-tight">
-          <p id="m-acct-name" class="text-sm font-semibold text-sc-brown">—</p>
-          <p id="m-acct-points" class="text-[10px] text-sc-orange font-bold">0 pts</p>
-        </div>
+        <div class="flex-1 leading-tight"><p id="m-acct-name" class="text-sm font-semibold text-sc-brown">—</p><p id="m-acct-points" class="text-[10px] text-sc-orange font-bold">0 pts</p></div>
       </div>
       <button id="m-logout" class="text-stone-400 hover:text-red-600 p-2 rounded-xl hover:bg-white"><i data-lucide="log-out" class="w-4 h-4"></i></button>
     </div>
@@ -171,7 +151,6 @@ tailwind.config = {
           <button type="button" data-star="4" class="star-btn text-3xl text-stone-300">★</button>
           <button type="button" data-star="5" class="star-btn text-3xl text-stone-300">★</button>
         </div>
-        <input type="hidden" id="rev-rating">
       </div>
       <textarea id="rev-comment" rows="3" placeholder="Tell us about your experience..." class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></textarea>
       <button type="submit" class="w-full bg-sc-orange text-white py-3 rounded-xl font-semibold hover:bg-[#d4551d] transition flex items-center justify-center gap-2"><i data-lucide="send" class="w-4 h-4"></i>Submit Review</button>
@@ -189,12 +168,9 @@ tailwind.config = {
 
 <div id="order-bar" class="hide fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md">
   <div class="bg-sc-brown text-white rounded-2xl shadow-2xl p-3 pl-5 flex items-center gap-2">
-    <div class="flex-1 min-w-0">
-      <p class="text-[10px] uppercase tracking-widest text-sc-cream/60">Your order</p>
-      <p id="bar-summary" class="text-sm font-semibold truncate">0 items · UGX 0</p>
-    </div>
-    <button id="bar-clear" class="text-sc-cream/60 hover:text-red-400 p-2.5 rounded-xl hover:bg-white/10 transition"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-    <button id="bar-cart" class="relative text-sc-cream hover:text-white p-2.5 rounded-xl hover:bg-white/10 transition">
+    <div class="flex-1 min-w-0"><p class="text-[10px] uppercase tracking-widest text-sc-cream/60">Your order</p><p id="bar-summary" class="text-sm font-semibold truncate">0 items · UGX 0</p></div>
+    <button id="bar-clear" class="text-sc-cream/60 hover:text-red-400 p-2.5 rounded-xl hover:bg-white/10"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+    <button id="bar-cart" class="relative text-sc-cream p-2.5 rounded-xl hover:bg-white/10">
       <i data-lucide="shopping-cart" class="w-6 h-6"></i>
       <span id="bar-count" class="absolute top-0.5 right-0.5 bg-sc-yellow text-sc-brown text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
     </button>
@@ -206,17 +182,14 @@ tailwind.config = {
 <div id="cart-drawer" class="modal-card fixed z-[60] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl flex flex-col max-h-[84vh]">
   <div class="flex items-center justify-between p-5 border-b border-stone-100">
     <div class="flex items-center gap-2"><i data-lucide="shopping-cart" class="w-5 h-5 text-sc-orange"></i><h2 class="disp text-xl font-extrabold text-sc-brown">Your Order</h2><span id="cart-count" class="text-xs font-bold bg-sc-yellow/20 text-sc-brown rounded-full px-2 py-0.5">0</span></div>
-    <button id="cart-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg hover:bg-sc-cream transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <button id="cart-close" class="text-stone-400 p-1.5 rounded-lg hover:bg-sc-cream"><i data-lucide="x" class="w-5 h-5"></i></button>
   </div>
   <div id="cart-list" class="flex-1 overflow-y-auto px-5 py-2"></div>
   <div class="p-5 border-t border-stone-100 bg-sc-cream rounded-b-3xl">
-    <div class="space-y-1 text-sm mb-3">
-      <div class="flex justify-between"><span class="text-stone-600">Subtotal</span><span id="cart-subtotal" class="font-semibold text-sc-brown">UGX 0</span></div>
-      <div class="flex justify-between text-base"><span class="text-stone-600">Total</span><span id="cart-total" class="disp text-lg font-extrabold text-sc-brown">UGX 0</span></div>
-    </div>
+    <div class="flex justify-between text-base mb-3"><span class="text-stone-600">Total</span><span id="cart-total" class="disp text-lg font-extrabold text-sc-brown">UGX 0</span></div>
     <div class="flex gap-2">
-      <button id="cart-clear" class="px-4 py-3 rounded-xl border border-stone-200 text-stone-500 hover:text-red-600 text-sm font-semibold transition">Clear</button>
-      <button id="cart-checkout" class="flex-1 bg-sc-orange hover:bg-[#d4551d] text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition"><i data-lucide="bike" class="w-4 h-4"></i>Checkout</button>
+      <button id="cart-clear" class="px-4 py-3 rounded-xl border border-stone-200 text-stone-500 hover:text-red-600 text-sm font-semibold">Clear</button>
+      <button id="cart-checkout" class="flex-1 bg-sc-orange hover:bg-[#d4551d] text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2"><i data-lucide="bike" class="w-4 h-4"></i>Checkout</button>
     </div>
   </div>
 </div>
@@ -226,7 +199,7 @@ tailwind.config = {
   <div class="p-6">
     <div class="flex items-center justify-between mb-4">
       <h2 class="disp text-xl font-extrabold text-sc-brown flex items-center gap-2"><i data-lucide="bike" class="w-5 h-5 text-sc-orange"></i>Delivery</h2>
-      <button id="delivery-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg hover:bg-sc-cream transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+      <button id="delivery-close" class="text-stone-400 p-1.5 rounded-lg hover:bg-sc-cream"><i data-lucide="x" class="w-5 h-5"></i></button>
     </div>
     <form id="delivery-form" class="space-y-3">
       <input id="d-name" required placeholder="Your name" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange">
@@ -238,6 +211,11 @@ tailwind.config = {
         <button type="button" id="d-apply" class="px-4 py-3 rounded-xl bg-sc-brown text-sc-yellow text-sm font-semibold">Apply</button>
       </div>
       <p id="d-code-status" class="text-xs text-center"></p>
+      <div class="flex gap-2">
+        <input id="d-reward" placeholder="Reward code (RWD-…)" class="flex-1 bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange uppercase">
+        <button type="button" id="d-reward-apply" class="px-4 py-3 rounded-xl bg-sc-orange text-white text-sm font-semibold">Apply</button>
+      </div>
+      <p id="d-reward-status" class="text-xs text-center"></p>
       <div id="redeem-box" class="hidden bg-sc-yellow/10 border border-sc-yellow/50 rounded-xl p-4">
         <label class="flex items-center justify-between cursor-pointer gap-3">
           <span class="text-sm font-semibold text-sc-brown flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 text-sc-orange"></i>Redeem my points</span>
@@ -251,6 +229,7 @@ tailwind.config = {
       </div>
       <textarea id="d-notes" rows="2" placeholder="Notes (optional)" class="w-full bg-sc-cream rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-sc-orange"></textarea>
       <div class="bg-sc-cream rounded-xl px-4 py-3 space-y-1 text-sm">
+        <div class="flex justify-between text-green-700 hidden" id="d-discount-row"><span>Discounts</span><span id="d-discount-amt">−UGX 0</span></div>
         <div class="flex justify-between items-center"><span class="font-semibold text-stone-600">You pay</span><span id="d-total" class="disp text-xl font-extrabold text-sc-brown">UGX 0</span></div>
         <p id="d-earn-preview" class="text-[11px] text-stone-500 pt-1"></p>
       </div>
@@ -263,7 +242,7 @@ tailwind.config = {
 <div id="auth-modal" class="modal-card fixed z-[90] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7 max-h-[88vh] overflow-y-auto">
   <div class="flex items-center justify-between mb-4">
     <h2 id="auth-title" class="disp text-2xl font-extrabold text-sc-brown">Login</h2>
-    <button id="auth-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg hover:bg-sc-cream transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <button id="auth-close" class="text-stone-400 p-1.5 rounded-lg hover:bg-sc-cream"><i data-lucide="x" class="w-5 h-5"></i></button>
   </div>
   <p id="auth-error" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-xl mb-3"></p>
   <p id="auth-info" class="hidden text-green-700 text-sm bg-green-50 p-3 rounded-xl mb-3"></p>
@@ -295,14 +274,26 @@ tailwind.config = {
 <div id="rew-modal" class="modal-card fixed z-[87] left-1/2 top-1/2 w-[94%] max-w-sm bg-white rounded-3xl shadow-2xl p-7 max-h-[88vh] overflow-y-auto">
   <div class="flex items-center justify-between mb-4">
     <h2 class="disp text-xl font-extrabold text-sc-brown flex items-center gap-2"><i data-lucide="gift" class="w-5 h-5 text-sc-orange"></i>My Rewards</h2>
-    <button id="rew-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg hover:bg-sc-cream transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <button id="rew-close" class="text-stone-400 p-1.5 rounded-lg hover:bg-sc-cream"><i data-lucide="x" class="w-5 h-5"></i></button>
   </div>
-  <div class="bg-sc-cream rounded-2xl p-5 text-center mb-4">
+  <div class="bg-sc-cream rounded-2xl p-5 text-center mb-3">
     <p class="text-[10px] uppercase tracking-widest text-stone-500">Points balance</p>
     <p id="rew-balance" class="disp text-4xl font-extrabold text-sc-orange mt-1">0</p>
     <p id="rew-value" class="text-xs text-stone-500 mt-1">Worth UGX 0 off your next order</p>
   </div>
-  <div id="rew-invite" class="rounded-2xl p-5 mb-4 bg-gradient-to-br from-sc-orange to-sc-brown text-white">
+  <div class="bg-sc-cream rounded-2xl p-5 mb-3">
+    <div class="flex items-center justify-between mb-2">
+      <p class="text-[10px] uppercase tracking-widest text-stone-500">Meals ordered</p>
+      <p id="rew-meals" class="disp text-2xl font-extrabold text-sc-orange">0</p>
+    </div>
+    <div class="h-2 bg-white rounded-full overflow-hidden"><div id="rew-meals-bar" class="h-full bg-gradient-to-r from-sc-orange to-sc-yellow rounded-full transition-all" style="width:0%"></div></div>
+    <p id="rew-next-milestone" class="text-[11px] text-stone-500 mt-2"></p>
+  </div>
+  <div id="rew-rewards-wrap" class="hidden mb-3">
+    <p class="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-2">🎁 Your unlocked rewards</p>
+    <div id="rew-rewards" class="space-y-2"></div>
+  </div>
+  <div id="rew-invite" class="rounded-2xl p-5 mb-3 bg-gradient-to-br from-sc-orange to-sc-brown text-white">
     <div class="flex items-center gap-2 mb-1"><i data-lucide="user-plus" class="w-4 h-4"></i><p class="font-bold text-sm">Invite a friend, earn points</p></div>
     <p class="text-[11px] text-white/80 mb-3">You get <b id="rew-r-ref">100</b> pts when they complete their first order · they get <b id="rew-r-fri">50</b> pts instantly.</p>
     <div class="flex gap-2">
@@ -317,7 +308,7 @@ tailwind.config = {
 
 <div id="success-backdrop" class="modal-bg fixed inset-0 z-[90] bg-sc-brown/40 backdrop-blur-md"></div>
 <div id="success-modal" class="modal-card fixed z-[95] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7 text-center">
-  <div class="w-14 h-14 rounded-full bg-sc-yellow/20 text-sc-orange flex items-center justify-center mx-auto mb-3"><i data-lucide="check" class="w-7 h-7"></i></div>
+  <div class="w-14 h-14 rounded-2xl bg-sc-brown text-sc-yellow flex items-center justify-center mx-auto mb-3"><i data-lucide="flame" class="w-7 h-7"></i></div>
   <h2 class="disp text-2xl font-extrabold text-sc-brown">Order Placed!</h2>
   <p class="text-sm text-stone-600 mt-1 mb-4">Save this code to track your order.</p>
   <div class="bg-sc-cream rounded-2xl p-4 mb-4 flex items-center justify-center gap-2">
@@ -334,7 +325,7 @@ tailwind.config = {
 <div id="track-modal" class="modal-card fixed z-[95] left-1/2 top-1/2 w-[94%] max-w-md bg-white rounded-3xl shadow-2xl p-7">
   <div class="flex items-center justify-between mb-4">
     <h2 class="disp text-xl font-extrabold text-sc-brown flex items-center gap-2"><i data-lucide="package-search" class="w-5 h-5 text-sc-orange"></i>Track Order</h2>
-    <button id="track-close" class="text-stone-400 hover:text-sc-brown p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <button id="track-close" class="text-stone-400 p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
   </div>
   <div class="flex gap-2">
     <input id="track-code" maxlength="8" placeholder="Order code" class="flex-1 bg-sc-cream rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-widest outline-none focus:ring-2 focus:ring-sc-orange">
@@ -348,514 +339,489 @@ tailwind.config = {
     </div>
     <div class="relative h-1 bg-stone-200 rounded-full my-6">
       <div id="track-bar" class="absolute left-0 top-0 h-1 bg-sc-orange rounded-full transition-all" style="width:0%"></div>
-      <div class="absolute inset-x-0 -top-1.5 flex justify-between">
-        <span class="track-dot"></span><span class="track-dot"></span><span class="track-dot"></span><span class="track-dot"></span><span class="track-dot"></span>
-      </div>
+      <div class="absolute inset-x-0 -top-1.5 flex justify-between"><span class="track-dot"></span><span class="track-dot"></span><span class="track-dot"></span><span class="track-dot"></span><span class="track-dot"></span></div>
     </div>
-    <div class="flex justify-between text-[10px] text-stone-500 uppercase mb-5">
-      <span>New</span><span>Confirmed</span><span>Cooking</span><span>On way</span><span>Done</span>
-    </div>
+    <div class="flex justify-between text-[10px] text-stone-500 uppercase mb-5"><span>New</span><span>Confirmed</span><span>Cooking</span><span>On way</span><span>Done</span></div>
     <div id="track-items" class="space-y-1 max-h-40 overflow-y-auto"></div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://jvcxgnypznyhkbcshxes.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2Y3hnbnlwem55aGtiY3NoeGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NDg4MzUsImV4cCI6MjEwMjEyNDgzNX0.ki8oAuaDYyEx8UpVWzXGDdruYOIfRLqP9SAqUlhVq9w';
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let WHATSAPP = '256764256966';
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SUPABASE_URL='https://jvcxgnypznyhkbcshxes.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2Y3hnbnlwem55aGtiY3NoeGVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1NDg4MzUsImV4cCI6MjEwMjEyNDgzNX0.ki8oAuaDYyEx8UpVWzXGDdruYOIfRLqP9SAqUlhVq9w';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let WHATSAPP='256764256966';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// Capture referral link (?ref=SC-XXXXXX)
-const refParam = new URLSearchParams(location.search).get('ref');
-if (refParam) localStorage.setItem('sc_ref', refParam.trim().toUpperCase());
+const refParam=new URLSearchParams(location.search).get('ref');
+if(refParam)localStorage.setItem('sc_ref',refParam.trim().toUpperCase());
 
-let MENU = [], byId = {}, cart = {}, user = null, profile = null, redeemOn = false;
+let MENU=[],byId={},cart={},user=null,profile=null,redeemOn=false,appliedReward=null;
+let reward={earn_rate:1,redeem_value:100};
 
-function showToast(msg, type = 'success') {
-  const wrap = $('toast-wrap'); const t = document.createElement('div');
-  const color = type === 'success' ? 'bg-sc-brown' : type === 'error' ? 'bg-red-600' : 'bg-stone-700';
-  t.className = 'toast ' + color + ' text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2';
-  t.innerHTML = '<i data-lucide="' + (type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info') + '" class="w-4 h-4 flex-shrink-0"></i><span>' + esc(msg) + '</span>';
-  wrap.appendChild(t); lucide.createIcons();
-  setTimeout(() => { t.style.transition = 'all .3s'; t.style.opacity = '0'; t.style.transform = 'translateY(-8px)'; setTimeout(() => t.remove(), 300); }, 2600);
+function showToast(msg,type='success'){const t=document.createElement('div');const color=type==='success'?'bg-sc-brown':type==='error'?'bg-red-600':'bg-stone-700';t.className='toast '+color+' text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2';t.innerHTML='<i data-lucide="'+(type==='success'?'check-circle':type==='error'?'alert-circle':'info')+'" class="w-4 h-4 flex-shrink-0"></i><span>'+esc(msg)+'</span>';$('toast-wrap').appendChild(t);lucide.createIcons();setTimeout(()=>{t.style.transition='all .3s';t.style.opacity='0';setTimeout(()=>t.remove(),300);},2600);}
+
+async function loadContent(){
+  const{data}=await db.from('site_content').select('*');
+  const m={};(data||[]).forEach(r=>m[r.key]=r.value);
+  if(m.hero_tagline)$('hero-tagline').textContent=m.hero_tagline;
+  if(m.whatsapp_number)WHATSAPP=m.whatsapp_number;
+  if(m.announcement){$('announcement').textContent=m.announcement;$('announcement').classList.remove('hidden');$('m-announcement').textContent=m.announcement;$('m-announcement').classList.remove('hidden');}
+  if(m.hours_weekday)$('f-hours-weekday').textContent=m.hours_weekday;
+  if(m.hours_sunday)$('f-hours-sunday').textContent=m.hours_sunday;
+  if(m.address)$('f-address').textContent=m.address;
+  const r=await db.from('reward_settings').select('*');
+  (r.data||[]).forEach(x=>{reward[x.key]=Number(x.value)||0;});
 }
 
-async function loadContent() {
-  const { data } = await db.from('site_content').select('*');
-  const m = {}; (data || []).forEach(r => m[r.key] = r.value);
-  if (m.hero_tagline) $('hero-tagline').textContent = m.hero_tagline;
-  if (m.whatsapp_number) WHATSAPP = m.whatsapp_number;
-  if (m.announcement) {
-    $('announcement').textContent = m.announcement; $('announcement').classList.remove('hidden');
-    $('m-announcement').textContent = m.announcement; $('m-announcement').classList.remove('hidden');
-  }
-  if (m.hours_weekday) $('f-hours-weekday').textContent = m.hours_weekday;
-  if (m.hours_sunday) $('f-hours-sunday').textContent = m.hours_sunday;
-  if (m.address) $('f-address').textContent = m.address;
-}
-
-async function loadMenu() {
-  $('menu').innerHTML = '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">' + Array(6).fill('<div class="rounded-2xl bg-white border border-[#EC6426]/10 p-5"><div class="skeleton h-5 w-3/4 mb-3"></div><div class="skeleton h-3 w-full mb-2"></div><div class="skeleton h-3 w-2/3 mb-4"></div></div>').join('') + '</div>';
-  const c = await db.from('menu_categories').select('*').order('display_order');
-  const i = await db.from('menu_items').select('*').eq('is_available', true).order('display_order');
-  MENU = (c.data || []).map(ct => ({
-    cat: ct.name,
-    items: (i.data || []).filter(it => it.category_id === ct.id).map(it => ({ id: it.id, name: it.name, price: it.price, b: it.badge, t: it.tags, note: it.chef_note || it.description, img: it.image_url || null }))
-  })).filter(x => x.items.length);
-  byId = {}; MENU.forEach(s => s.items.forEach(it => byId[it.id] = it));
+async function loadMenu(){
+  $('menu').innerHTML='<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">'+Array(6).fill('<div class="rounded-2xl bg-white border border-[#EC6426]/10 p-5"><div class="skeleton h-5 w-3/4 mb-3"></div><div class="skeleton h-3 w-full mb-2"></div><div class="skeleton h-3 w-2/3"></div></div>').join('')+'</div>';
+  const c=await db.from('menu_categories').select('*').order('display_order');
+  const i=await db.from('menu_items').select('*').eq('is_available',true).order('display_order');
+  MENU=(c.data||[]).map(ct=>({cat:ct.name,items:(i.data||[]).filter(it=>it.category_id===ct.id).map(it=>({id:it.id,name:it.name,price:it.price,b:it.badge,t:it.tags,note:it.chef_note||it.description,img:it.image_url||null}))})).filter(x=>x.items.length);
+  byId={};MENU.forEach(s=>s.items.forEach(it=>byId[it.id]=it));
   render();
 }
 
-const badgeHtml = b => b === 'best' ? '<span class="text-[10px] font-bold uppercase tracking-wide text-sc-brown bg-sc-yellow rounded-full px-2 py-0.5 whitespace-nowrap">★ Best</span>' : b === 'chef' ? '<span class="text-[10px] font-bold uppercase tracking-wide text-sc-yellow bg-sc-brown rounded-full px-2 py-0.5 whitespace-nowrap">Chef\'s</span>' : '';
-const tagHtml = t => (t || []).map(x => x === 'spicy' ? '<span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-sc-orange"><i data-lucide="flame" class="w-3 h-3"></i>Spicy</span>' : x === 'vegan' ? '<span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-green-700"><i data-lucide="leaf" class="w-3 h-3"></i>Vegan</span>' : '').join('');
+const badgeHtml=b=>b==='best'?'<span class="text-[10px] font-bold uppercase tracking-wide text-sc-brown bg-sc-yellow rounded-full px-2 py-0.5 whitespace-nowrap">★ Best</span>':b==='chef'?'<span class="text-[10px] font-bold uppercase tracking-wide text-sc-yellow bg-sc-brown rounded-full px-2 py-0.5 whitespace-nowrap">Chef\'s</span>':'';
+const tagHtml=t=>(t||[]).map(x=>x==='spicy'?'<span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-sc-orange"><i data-lucide="flame" class="w-3 h-3"></i>Spicy</span>':x==='vegan'?'<span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-green-700"><i data-lucide="leaf" class="w-3 h-3"></i>Vegan</span>':'').join('');
 
-function ctlHtml(id) {
-  const q = cart[id] || 0;
-  return q === 0 ? '<button data-add="' + id + '" class="addbtn">+</button>' : '<div class="flex items-center gap-2"><button data-dec="' + id + '" class="stepbtn">−</button><span class="text-sm font-bold text-sc-brown w-4 text-center">' + q + '</span><button data-inc="' + id + '" class="stepbtn">+</button></div>';
-}
+function ctlHtml(id){const q=cart[id]||0;return q===0?'<button data-add="'+id+'" class="addbtn">+</button>':'<div class="flex items-center gap-2"><button data-dec="'+id+'" class="stepbtn">−</button><span class="text-sm font-bold text-sc-brown w-4 text-center">'+q+'</span><button data-inc="'+id+'" class="stepbtn">+</button></div>';}
 
-function render() {
-  const root = $('menu'); let h = '';
-  MENU.forEach(s => {
-    h += '<section class="menu-section mb-12 reveal"><div class="flex items-center gap-4 mb-5"><h2 class="disp min-w-0 text-2xl font-extrabold text-sc-brown">' + esc(s.cat) + '</h2><div class="flex-1 min-w-0 h-px bg-sc-orange/30"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">';
-    s.items.forEach(item => {
-      h += '<div class="menu-card menu-item flex flex-col rounded-2xl bg-white border border-[#EC6426]/15 shadow-sm overflow-hidden" data-name="' + esc(item.name.toLowerCase()) + '">' +
-        (item.img ? '<div class="aspect-[4/3] bg-sc-cream overflow-hidden"><img src="' + esc(item.img) + '" alt="' + esc(item.name) + '" loading="lazy" class="w-full h-full object-cover" onerror="this.parentElement.style.display=\'none\'"></div>' : '') +
-        '<div class="flex flex-col flex-1 p-5">' +
-          '<div class="flex items-start justify-between gap-2 mb-1"><h3 class="min-w-0 flex-1 font-semibold text-sc-brown leading-snug break-words">' + esc(item.name) + '</h3>' + badgeHtml(item.b) + '</div>' +
-          ((item.t && item.t.length) ? '<div class="flex flex-wrap gap-1.5 mb-1">' + tagHtml(item.t) + '</div>' : '') +
-          (item.note ? '<button data-info="' + item.id + '" class="self-start flex items-center gap-1 text-[11px] font-semibold text-sc-orange hover:underline mt-0.5"><span class="info-label">Details</span><i data-lucide="chevron-down" class="w-3.5 h-3.5 info-chev"></i></button><div data-infobox="' + item.id + '" class="hidden mt-2 text-xs text-stone-600 leading-relaxed bg-sc-cream/70 rounded-xl px-3 py-2.5 border border-[#EC6426]/10">' + esc(item.note) + '</div>' : '') +
-          '<div class="flex-1"></div>' +
-          '<div class="flex items-center justify-between mt-3 pt-3 border-t border-[#EC6426]/10"><span class="font-bold text-sc-brown">UGX ' + item.price.toLocaleString() + '</span><div data-ctl="' + item.id + '">' + ctlHtml(item.id) + '</div></div>' +
-        '</div>' +
-      '</div>';
+function render(){
+  let h='';
+  MENU.forEach(s=>{
+    h+='<section class="menu-section mb-12"><div class="flex items-center gap-4 mb-5"><h2 class="disp text-2xl font-extrabold text-sc-brown whitespace-nowrap">'+esc(s.cat)+'</h2><div class="flex-1 h-px bg-sc-orange/30"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">';
+    s.items.forEach(item=>{
+      h+='<div class="menu-card menu-item flex flex-col rounded-2xl bg-white border border-[#EC6426]/15 shadow-sm overflow-hidden" data-name="'+esc(item.name.toLowerCase())+'">'+
+        (item.img?'<div class="aspect-[4/3] bg-sc-cream overflow-hidden"><img src="'+esc(item.img)+'" alt="'+esc(item.name)+'" loading="lazy" class="w-full h-full object-cover" onerror="this.parentElement.style.display=\'none\'"></div>':'')+
+        '<div class="flex flex-col flex-1 p-5">'+
+          '<div class="flex items-start justify-between gap-2 mb-1"><h3 class="font-semibold text-sc-brown leading-snug">'+esc(item.name)+'</h3>'+badgeHtml(item.b)+'</div>'+
+          ((item.t&&item.t.length)?'<div class="flex flex-wrap gap-1.5 mb-1">'+tagHtml(item.t)+'</div>':'')+
+          (item.note?'<button data-info="'+item.id+'" class="self-start flex items-center gap-1 text-[11px] font-semibold text-sc-orange hover:underline mt-0.5"><span class="info-label">Details</span><i data-lucide="chevron-down" class="w-3.5 h-3.5 info-chev"></i></button><div data-infobox="'+item.id+'" class="hidden mt-2 text-xs text-stone-600 leading-relaxed bg-sc-cream/70 rounded-xl px-3 py-2.5 border border-[#EC6426]/10">'+esc(item.note)+'</div>':'')+
+          '<div class="flex-1"></div>'+
+          '<div class="flex items-center justify-between mt-3 pt-3 border-t border-[#EC6426]/10"><span class="font-bold text-sc-brown">UGX '+item.price.toLocaleString()+'</span><div data-ctl="'+item.id+'">'+ctlHtml(item.id)+'</div></div>'+
+        '</div></div>';
     });
-    h += '</div></section>';
+    h+='</div></section>';
   });
-  root.innerHTML = h || '<p class="text-center text-stone-400 py-10">Menu is being updated — check back soon.</p>';
-  $('index').innerHTML = MENU.map((s, i) => '<button data-goto="' + i + '" class="chip text-[11px] sm:text-xs font-semibold text-sc-brown bg-white border border-[#EC6426]/25 rounded-full px-3 py-1.5">' + esc(s.cat) + '</button>').join('');
-  lucide.createIcons(); observe();
-}
-
-function toggleInfo(id) {
-  const box = document.querySelector('[data-infobox="' + id + '"]');
-  const btn = document.querySelector('[data-info="' + id + '"]');
-  if (!box) return;
-  const nowHidden = box.classList.toggle('hidden');
-  if (btn) {
-    const chev = btn.querySelector('.info-chev');
-    const label = btn.querySelector('.info-label');
-    if (chev) chev.style.transform = nowHidden ? '' : 'rotate(180deg)';
-    if (label) label.textContent = nowHidden ? 'Details' : 'Hide';
-  }
-}
-
-function observe() {
-  const els = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('on')); return; }
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { threshold: 0, rootMargin: '0px 0px -8% 0px' });
-  els.forEach(el => io.observe(el));
-  setTimeout(() => els.forEach(el => el.classList.add('on')), 1500);
-}
-
-const cartBg = $('cart-backdrop'), cartD = $('cart-drawer');
-const openCart = () => { renderCartList(); cartBg.classList.add('open'); cartD.classList.add('open'); document.body.style.overflow = 'hidden'; };
-const closeCart = () => { cartBg.classList.remove('open'); cartD.classList.remove('open'); document.body.style.overflow = ''; };
-
-function setQty(id, d) {
-  const wasEmpty = !(cart[id] > 0);
-  const q = (cart[id] || 0) + d;
-  if (q <= 0) delete cart[id]; else cart[id] = q;
-  if (wasEmpty && d > 0 && byId[id]) showToast(byId[id].name + ' added to cart');
-  const c = document.querySelector('[data-ctl="' + id + '"]');
-  if (c) c.innerHTML = ctlHtml(id);
-  updateBar(); if (cartD.classList.contains('open')) renderCartList();
-}
-
-function clearCart() {
-  for (const k in cart) delete cart[k];
-  $('d-code').value = ''; $('d-code-status').textContent = ''; $('redeem-toggle').checked = false;
-  document.querySelectorAll('[data-ctl]').forEach(el => { el.innerHTML = ctlHtml(el.dataset.ctl); });
-  updateBar(); renderCartList();
-  showToast('Cart cleared', 'info');
-}
-
-function subtotal() { let t = 0; for (const id in cart) t += cart[id] * byId[id].price; return t; }
-
-function updateBar() {
-  const n = Object.keys(cart).reduce((s, id) => s + cart[id], 0);
-  const sub = subtotal();
-  $('bar-summary').textContent = n + ' items · UGX ' + sub.toLocaleString();
-  $('bar-count').textContent = n;
-  const tc = $('top-count'); tc.textContent = n; tc.classList.toggle('hidden', n === 0); tc.classList.toggle('flex', n > 0);
-  $('cart-subtotal').textContent = 'UGX ' + sub.toLocaleString();
-  $('cart-total').textContent = 'UGX ' + sub.toLocaleString();
-  $('order-bar').classList.toggle('hide', n === 0);
-}
-
-function renderCartList() {
-  const list = $('cart-list'); const ids = Object.keys(cart);
-  $('cart-count').textContent = ids.reduce((s, id) => s + cart[id], 0);
-  if (!ids.length) { list.innerHTML = '<div class="text-center py-12 text-stone-400">Cart is empty.</div>'; return; }
-  list.innerHTML = ids.map(id => {
-    const it = byId[id], q = cart[id];
-    return '<div class="flex items-center gap-2 py-3 border-b border-stone-100"><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-sc-brown truncate">' + esc(it.name) + '</p><p class="text-xs text-stone-400">UGX ' + it.price.toLocaleString() + '</p></div><div class="flex items-center gap-1.5 flex-shrink-0"><button data-dec="' + id + '" class="stepbtn">−</button><span class="text-sm font-bold text-sc-brown w-5 text-center">' + q + '</span><button data-inc="' + id + '" class="stepbtn">+</button></div><span class="w-16 sm:w-20 flex-shrink-0 text-right text-sm font-bold text-sc-brown">UGX ' + (q * it.price).toLocaleString() + '</span></div>';
-  }).join('');
-}
-
-function openModal(bg, id) { $(bg).classList.add('open'); $(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeModal(bg, id) { $(bg).classList.remove('open'); $(id).classList.remove('open'); document.body.style.overflow = ''; }
-
-const waPhone = p => { let d = (p || '').replace(/\D/g, ''); if (!d) return ''; if (d.startsWith('0')) d = '256' + d.slice(1); else if (!d.startsWith('256')) d = '256' + d; return d; };
-
-function openDelivery() {
-  if (profile) {
-    $('d-name').value = profile.full_name || '';
-    $('d-phone').value = profile.phone_number || '';
-    $('d-email').value = profile.email || user?.email || '';
-  }
-  $('redeem-toggle').checked = false;
-  const sub = subtotal();
-  $('d-total').textContent = 'UGX ' + sub.toLocaleString();
-  $('d-earn-preview').textContent = user ? 'This order earns you points (calculated server-side)' : 'Log in to earn rewards on this order.';
-  openModal('delivery-backdrop', 'delivery-modal');
-}
-
-async function placeOrder(e) {
-  e.preventDefault();
-  const name = $('d-name').value.trim(), phone = waPhone($('d-phone').value), email = $('d-email').value.trim(), address = $('d-address').value.trim(), notes = $('d-notes').value.trim();
-  const n = Object.keys(cart).reduce((s, id) => s + cart[id], 0);
-  if (!n) { showToast('Your cart is empty', 'error'); return; }
-  const btn = $('d-submit'); btn.disabled = true; btn.textContent = 'Placing…';
-  const { data, error } = await db.rpc('place_order', {
-    p_customer_name: name,
-    p_customer_phone: phone,
-    p_customer_address: address,
-    p_items: Object.keys(cart).map(id => ({ menu_item_id: id, quantity: cart[id] })),
-    p_customer_email: email || null,
-    p_notes: notes || null,
-    p_discount_code: $('d-code').value.trim() || null,
-    p_redeem: redeemOn
-  });
-  btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i>Place Order'; lucide.createIcons();
-  if (error) { showToast(error.message || 'Order could not be placed.', 'error'); return; }
-  const code = data.order_code;
-  let msg = 'Hello Street Chefs! Order ' + code + ':\n';
-  for (const id in cart) msg += cart[id] + 'x ' + byId[id].name + '\n';
-  msg += 'Total: UGX ' + Number(data.total).toLocaleString();
-  if (data.points_redeemed > 0) msg += ' (paid with ' + data.points_redeemed + ' pts)';
-  msg += '\nName: ' + name + '\nPhone: +' + phone + '\nAddress: ' + address;
-  window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
-  clearCart();
-  closeModal('delivery-backdrop', 'delivery-modal'); closeCart();
-  $('success-code').textContent = code;
-  $('whatsapp-loc-btn').href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Hi Street Chefs! My order #' + code + ' is placed. Sharing my delivery location now 📍');
-  const parts = [];
-  if (data.points_earned > 0) parts.push('+' + data.points_earned + ' points earned!');
-  if (data.points_redeemed > 0) parts.push(data.points_redeemed + ' pts redeemed');
-  if (parts.length) { $('success-points').textContent = parts.join(' · '); $('success-points').classList.remove('hidden'); }
-  else $('success-points').classList.add('hidden');
-  openModal('success-backdrop', 'success-modal');
-  if (user) await refreshUser();
-}
-
-async function openRewards() {
-  if (!user) return;
-  $('rew-balance').textContent = (profile?.points || 0).toLocaleString();
-  $('rew-value').textContent = 'Worth UGX ' + ((profile?.points || 0) * 100).toLocaleString() + ' off your next order';
-  $('rew-link').value = location.origin + location.pathname + '?ref=' + (profile?.referral_code || '');
-  const rs = await db.from('reward_settings').select('*');
-  const rm = {}; (rs.data || []).forEach(r => rm[r.key] = Number(r.value) || 0);
-  $('rew-r-ref').textContent = rm.referral_reward_referrer ?? 100;
-  $('rew-r-fri').textContent = rm.referral_reward_friend ?? 50;
-  const { data: stats } = await db.rpc('get_referral_stats', { p_user_id: user.id });
-  if (stats) $('rew-stats').textContent = stats.invited + ' friends invited · ' + stats.converted + ' ordered · ' + stats.earned + ' pts earned from referrals';
-  $('rew-history').innerHTML = '<div class="skeleton h-10 w-full"></div>';
-  openModal('rew-backdrop', 'rew-modal');
-  const { data } = await db.from('points_log').select('*').eq('customer_id', user.id).order('created_at', { ascending: false }).limit(10);
-  const box = $('rew-history');
-  if (!data || !data.length) { box.innerHTML = '<p class="text-xs text-stone-400 text-center py-4">No activity yet.</p>'; return; }
-  box.innerHTML = data.map(l => {
-    const icon = l.type === 'earn' ? 'arrow-up-circle' : l.type === 'redeem' ? 'arrow-down-circle' : l.type === 'referral' ? 'user-plus' : 'settings';
-    const color = l.points >= 0 ? 'text-green-600' : 'text-sc-orange';
-    const date = new Date(l.created_at).toLocaleDateString('en-UG', { month: 'short', day: 'numeric' });
-    return '<div class="flex items-center gap-3 bg-sc-cream/50 rounded-xl px-3 py-2.5"><i data-lucide="' + icon + '" class="w-4 h-4 ' + color + ' flex-shrink-0"></i><div class="flex-1 min-w-0"><p class="text-xs font-semibold text-sc-brown truncate">' + esc(l.note || l.type) + '</p><p class="text-[10px] text-stone-400">' + date + '</p></div><span class="text-sm font-bold ' + color + '">' + (l.points > 0 ? '+' : '') + l.points + '</span></div>';
-  }).join('');
+  $('menu').innerHTML=h||'<p class="text-center text-stone-400 py-10">Menu is being updated — check back soon.</p>';
+  $('index').innerHTML=MENU.map((s,i)=>'<button data-goto="'+i+'" class="chip text-[11px] sm:text-xs font-semibold text-sc-brown bg-white border border-[#EC6426]/25 rounded-full px-3 py-1.5">'+esc(s.cat)+'</button>').join('');
   lucide.createIcons();
 }
 
-$('rew-copy').addEventListener('click', async () => {
-  try { await navigator.clipboard.writeText($('rew-link').value); showToast('Invite link copied — share it!'); } catch (e) {}
-});
+function toggleInfo(id){
+  const box=document.querySelector('[data-infobox="'+id+'"]');
+  const btn=document.querySelector('[data-info="'+id+'"]');
+  if(!box)return;
+  const nowHidden=box.classList.toggle('hidden');
+  if(btn){const chev=btn.querySelector('.info-chev');const label=btn.querySelector('.info-label');if(chev)chev.style.transform=nowHidden?'':'rotate(180deg)';if(label)label.textContent=nowHidden?'Details':'Hide';}
+}
 
-let selectedRating = 0;
-$('star-rating').addEventListener('click', e => {
-  const b = e.target.closest('[data-star]'); if (!b) return;
-  selectedRating = +b.dataset.star; $('rev-rating').value = selectedRating;
-  document.querySelectorAll('[data-star]').forEach((s, i) => { s.classList.toggle('text-sc-orange', i < selectedRating); s.classList.toggle('text-stone-300', i >= selectedRating); });
-});
+const cartBg=$('cart-backdrop'),cartD=$('cart-drawer');
+const openCart=()=>{renderCartList();cartBg.classList.add('open');cartD.classList.add('open');document.body.style.overflow='hidden';};
+const closeCart=()=>{cartBg.classList.remove('open');cartD.classList.remove('open');document.body.style.overflow='';};
 
-$('review-form').addEventListener('submit', async e => {
+function setQty(id,d){
+  const wasEmpty=!(cart[id]>0);
+  const q=(cart[id]||0)+d;
+  if(q<=0)delete cart[id];else cart[id]=q;
+  if(wasEmpty&&d>0&&byId[id])showToast(byId[id].name+' added to cart');
+  const c=document.querySelector('[data-ctl="'+id+'"]');if(c)c.innerHTML=ctlHtml(id);
+  updateBar();if(cartD.classList.contains('open'))renderCartList();
+}
+function clearCart(){
+  for(const k in cart)delete cart[k];
+  appliedReward=null;$('d-code').value='';$('d-code-status').textContent='';$('d-reward').value='';$('d-reward-status').textContent='';$('redeem-toggle').checked=false;
+  document.querySelectorAll('[data-ctl]').forEach(el=>{el.innerHTML=ctlHtml(el.dataset.ctl);});
+  updateBar();renderCartList();showToast('Cart cleared','info');
+}
+function subtotal(){let t=0;for(const id in cart)t+=cart[id]*byId[id].price;return t;}
+function updateBar(){
+  const n=Object.keys(cart).reduce((s,id)=>s+cart[id],0);
+  const sub=subtotal();
+  $('bar-summary').textContent=n+' items · UGX '+sub.toLocaleString();
+  $('bar-count').textContent=n;
+  const tc=$('top-count');tc.textContent=n;tc.classList.toggle('hidden',n===0);tc.classList.toggle('flex',n>0);
+  $('cart-total').textContent='UGX '+sub.toLocaleString();
+  $('order-bar').classList.toggle('hide',n===0);
+}
+function renderCartList(){
+  const list=$('cart-list');const ids=Object.keys(cart);
+  $('cart-count').textContent=ids.reduce((s,id)=>s+cart[id],0);
+  if(!ids.length){list.innerHTML='<div class="text-center py-12 text-stone-400">Cart is empty.</div>';return;}
+  list.innerHTML=ids.map(id=>{const it=byId[id],q=cart[id];return '<div class="flex items-center gap-3 py-3 border-b border-stone-100"><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-sc-brown truncate">'+esc(it.name)+'</p><p class="text-xs text-stone-400">UGX '+it.price.toLocaleString()+'</p></div><div class="flex items-center gap-1.5"><button data-dec="'+id+'" class="stepbtn">−</button><span class="text-sm font-bold text-sc-brown w-5 text-center">'+q+'</span><button data-inc="'+id+'" class="stepbtn">+</button></div><span class="w-20 text-right text-sm font-bold text-sc-brown">UGX '+(q*it.price).toLocaleString()+'</span></div>';}).join('');
+}
+
+function openModal(bg,id){$(bg).classList.add('open');$(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(bg,id){$(bg).classList.remove('open');$(id).classList.remove('open');document.body.style.overflow='';}
+const waPhone=p=>{let d=(p||'').replace(/\D/g,'');if(!d)return '';if(d.startsWith('0'))d='256'+d.slice(1);else if(!d.startsWith('256'))d='256'+d;return d;};
+
+function openDelivery(){
+  if(profile){$('d-name').value=profile.full_name||'';$('d-phone').value=profile.phone_number||'';$('d-email').value=profile.email||user?.email||'';}
+  $('redeem-toggle').checked=false;
+  updateCheckoutTotals();
+  openModal('delivery-backdrop','delivery-modal');
+}
+function updateCheckoutTotals(){
+  const sub=subtotal();
+  $('d-total').textContent='UGX '+sub.toLocaleString();
+  $('d-earn-preview').textContent=user?'This order earns you points (calculated securely at order time).':'Log in to earn rewards on this order.';
+  const box=$('redeem-box'),nudge=$('redeem-nudge');
+  if(user&&profile&&(profile.points||0)>0){box.classList.remove('hidden');nudge.classList.add('hidden');$('redeem-info').textContent='You have '+(profile.points||0)+' pts. Toggle to use them on this order.';}
+  else if(!user){box.classList.add('hidden');nudge.classList.remove('hidden');}
+  else{box.classList.add('hidden');nudge.classList.add('hidden');}
+}
+
+$('d-apply').addEventListener('click',async()=>{
+  const code=$('d-code').value.trim().toUpperCase();const st=$('d-code-status');
+  if(!code)return;
+  const{data}=await db.from('discount_codes').select('*').eq('code',code).eq('active',true).maybeSingle();
+  if(!data){st.textContent='Invalid or expired code.';st.className='text-xs text-center text-red-600';}
+  else{st.textContent='✓ '+code+' applied!';st.className='text-xs text-center text-green-700';}
+});
+$('d-reward-apply').addEventListener('click',async()=>{
+  const code=$('d-reward').value.trim().toUpperCase();const st=$('d-reward-status');
+  if(!code)return;
+  if(!user){st.textContent='Log in to use reward codes.';st.className='text-xs text-center text-red-600';return;}
+  const{data}=await db.from('customer_milestones').select('*, milestones(name, reward_type, reward_value, reward_description), menu_items(name)').eq('reward_code',code).maybeSingle();
+  if(!data||data.customer_id!==user.id||data.status!=='available'){st.textContent='Code not found or already used.';st.className='text-xs text-center text-red-600';appliedReward=null;return;}
+  appliedReward=data;
+  const m=data.milestones;
+  const desc=m.reward_type==='freebie'?'🎁 '+(data.menu_items?.name||m.reward_description||'Free item'):m.reward_type==='percent'?m.reward_value+'% off':'UGX '+m.reward_value+' off';
+  st.textContent='✓ '+desc+' will be applied!';st.className='text-xs text-center text-green-700';
+});
+$('redeem-toggle').addEventListener('change',e=>{redeemOn=e.target.checked;});
+$('redeem-login').addEventListener('click',()=>{closeModal('delivery-backdrop','delivery-modal');openAuth('login');});
+
+async function placeOrder(e){
   e.preventDefault();
-  if (!selectedRating) { showToast('Please select a star rating', 'error'); return; }
-  const name = $('rev-name').value.trim(), comment = $('rev-comment').value.trim();
-  const { error } = await db.from('reviews').insert({ customer_name: name, rating: selectedRating, comment });
-  if (error) { showToast('Could not submit review.', 'error'); return; }
+  const name=$('d-name').value.trim(),phone=waPhone($('d-phone').value),email=$('d-email').value.trim(),address=$('d-address').value.trim(),notes=$('d-notes').value.trim();
+  const n=Object.keys(cart).reduce((s,id)=>s+cart[id],0);
+  if(!n){showToast('Your cart is empty','error');return;}
+  const btn=$('d-submit');btn.disabled=true;btn.textContent='Placing…';
+  const{data,error}=await db.rpc('place_order',{
+    p_customer_name:name,p_customer_phone:phone,p_customer_address:address,
+    p_items:Object.keys(cart).map(id=>({menu_item_id:id,quantity:cart[id]})),
+    p_customer_email:email||null,p_notes:notes||null,
+    p_discount_code:$('d-code').value.trim()||null,
+    p_redeem:redeemOn,
+    p_reward_code:appliedReward?appliedReward.reward_code:($('d-reward').value.trim()||null)
+  });
+  btn.disabled=false;btn.innerHTML='<i data-lucide="send" class="w-4 h-4"></i>Place Order';lucide.createIcons();
+  if(error){showToast(error.message||'Order could not be placed.','error');return;}
+  const code=data.order_code;
+  let msg='Hello Street Chefs! Order '+code+':\n';
+  for(const id in cart)msg+=cart[id]+'x '+byId[id].name+'\n';
+  if(data.freebie)msg+='🎁 FREE REWARD: '+data.freebie+'\n';
+  msg+='\nTotal: UGX '+Number(data.total).toLocaleString();
+  if(data.reward_discount>0)msg+=' (reward −'+Number(data.reward_discount).toLocaleString()+')';
+  if(data.points_redeemed>0)msg+=' (paid with '+data.points_redeemed+' pts)';
+  msg+='\nName: '+name+'\nPhone: +'+phone+'\nAddress: '+address;
+  window.open('https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg),'_blank');
+  clearCart();
+  closeModal('delivery-backdrop','delivery-modal');closeCart();
+  $('success-code').textContent=code;
+  $('whatsapp-loc-btn').href='https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent('Hi Street Chefs! My order #'+code+' is placed. Sharing my delivery location now 📍');
+  const parts=[];
+  if(data.points_earned>0)parts.push('+'+data.points_earned+' points earned!');
+  if(data.points_redeemed>0)parts.push(data.points_redeemed+' pts redeemed');
+  if(data.freebie)parts.push('🎁 '+data.freebie);
+  if(parts.length){$('success-points').textContent=parts.join(' · ');}
+  $('success-points').classList.toggle('hidden',!parts.length);
+  openModal('success-backdrop','success-modal');
+  if(user)await refreshUser();
+}
+
+async function openRewards(){
+  if(!user)return;
+  $('rew-balance').textContent=(profile?.points||0).toLocaleString();
+  $('rew-value').textContent='Worth UGX '+((profile?.points||0)*(reward.redeem_value||100)).toLocaleString()+' off your next order';
+  $('rew-link').value=location.origin+location.pathname+'?ref='+(profile?.referral_code||'');
+  const rs=await db.from('reward_settings').select('*');
+  const rm={};(rs.data||[]).forEach(r=>rm[r.key]=Number(r.value)||0);
+  $('rew-r-ref').textContent=rm.referral_reward_referrer??100;
+  $('rew-r-fri').textContent=rm.referral_reward_friend??50;
+  const st=await db.rpc('get_referral_stats',{p_user_id:user.id});
+  if(st.data)$('rew-stats').textContent=st.data.invited+' friends invited · '+st.data.converted+' ordered · '+st.data.earned+' pts earned from referrals';
+  const mc=await db.rpc('get_customer_meals',{p_customer_id:user.id});
+  const meals=mc.data||0;
+  $('rew-meals').textContent=meals;
+  const ms=await db.from('milestones').select('*').eq('active',true).eq('threshold_type','meals').order('threshold_value');
+  if(ms.data&&ms.data.length){
+    const next=ms.data.find(m=>meals<m.threshold_value);
+    if(next){
+      $('rew-meals-bar').style.width=Math.min(100,Math.round(meals/next.threshold_value*100))+'%';
+      $('rew-next-milestone').textContent=(next.threshold_value-meals)+' more meals to unlock "'+next.name+'"';
+    }else{
+      $('rew-meals-bar').style.width='100%';
+      $('rew-next-milestone').textContent='🏆 All milestones unlocked!';
+    }
+  }
+  const rw=await db.from('customer_milestones').select('*, milestones(name, reward_type, reward_value, reward_description), menu_items(name)').eq('customer_id',user.id).order('granted_at',{ascending:false});
+  const wrap=$('rew-rewards-wrap');
+  if(rw.data&&rw.data.length){
+    wrap.classList.remove('hidden');
+    $('rew-rewards').innerHTML=rw.data.map(x=>{
+      const m=x.milestones;
+      const desc=m.reward_type==='freebie'?'🎁 '+(x.menu_items?.name||m.reward_description||'Free item'):m.reward_type==='percent'?m.reward_value+'% off':'UGX '+m.reward_value+' off';
+      return '<div class="flex items-center gap-2 p-3 rounded-xl '+(x.status==='available'?'bg-sc-yellow/10 border border-sc-yellow/50':'bg-stone-100 opacity-60')+'"><div class="flex-1 min-w-0"><p class="text-xs font-bold text-sc-brown">'+esc(x.milestones?.name||'Reward')+'</p><p class="text-[11px] text-stone-600">'+desc+'</p></div>'+(x.status==='available'?'<button data-copy-rwd="'+esc(x.reward_code)+'" class="text-[10px] font-bold bg-sc-brown text-sc-yellow px-2.5 py-1.5 rounded-lg">COPY '+esc(x.reward_code)+'</button>':'<span class="text-[10px] font-bold text-stone-500">USED</span>')+'</div>';
+    }).join('');
+  }else wrap.classList.add('hidden');
+  $('rew-history').innerHTML='<div class="skeleton h-10 w-full"></div>';
+  openModal('rew-backdrop','rew-modal');
+  const{data}=await db.from('points_log').select('*').eq('customer_id',user.id).order('created_at',{ascending:false}).limit(10);
+  const box=$('rew-history');
+  if(!data||!data.length){box.innerHTML='<p class="text-xs text-stone-400 text-center py-4">No activity yet.</p>';return;}
+  box.innerHTML=data.map(l=>{
+    const icon=l.type==='earn'?'arrow-up-circle':l.type==='redeem'?'arrow-down-circle':l.type==='referral'?'user-plus':'settings';
+    const color=l.points>=0?'text-green-600':'text-sc-orange';
+    const date=new Date(l.created_at).toLocaleDateString('en-UG',{month:'short',day:'numeric'});
+    return '<div class="flex items-center gap-3 bg-sc-cream/50 rounded-xl px-3 py-2.5"><i data-lucide="'+icon+'" class="w-4 h-4 '+color+' flex-shrink-0"></i><div class="flex-1 min-w-0"><p class="text-xs font-semibold text-sc-brown truncate">'+esc(l.note||l.type)+'</p><p class="text-[10px] text-stone-400">'+date+'</p></div><span class="text-sm font-bold '+color+'">'+(l.points>0?'+':'')+l.points+'</span></div>';
+  }).join('');
+  lucide.createIcons();
+}
+$('rew-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('rew-link').value);showToast('Invite link copied — share it!');}catch(e){}});
+$('rew-rewards').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-copy-rwd]');if(!b)return;
+  try{await navigator.clipboard.writeText(b.dataset.copyRwd);showToast('Reward code copied — paste it at checkout!');}catch(err){}
+});
+
+let selectedRating=0;
+$('star-rating').addEventListener('click',e=>{
+  const b=e.target.closest('[data-star]');if(!b)return;
+  selectedRating=+b.dataset.star;
+  document.querySelectorAll('[data-star]').forEach((s,i)=>{s.classList.toggle('text-sc-orange',i<selectedRating);s.classList.toggle('text-stone-300',i>=selectedRating);});
+});
+$('review-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!selectedRating){showToast('Please select a star rating','error');return;}
+  const{error}=await db.from('reviews').insert({customer_name:$('rev-name').value.trim(),rating:selectedRating,comment:$('rev-comment').value.trim()});
+  if(error){showToast('Could not submit review.','error');return;}
   showToast('Thanks! Your review is pending approval.');
-  $('review-form').reset(); selectedRating = 0;
-  document.querySelectorAll('[data-star]').forEach(s => { s.classList.remove('text-sc-orange'); s.classList.add('text-stone-300'); });
+  $('review-form').reset();selectedRating=0;
+  document.querySelectorAll('[data-star]').forEach(s=>{s.classList.remove('text-sc-orange');s.classList.add('text-stone-300');});
   loadReviews();
 });
-
-async function loadReviews() {
-  const { data } = await db.from('reviews').select('*').eq('is_approved', true).order('created_at', { ascending: false }).limit(50);
-  const list = $('reviews-list');
-  if (!data || !data.length) { list.innerHTML = '<p class="text-center text-stone-400">Be the first to review Street Chefs!</p>'; return; }
-  list.innerHTML = data.map(r => {
-    const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-    const date = new Date(r.created_at).toLocaleDateString('en-UG', { month: 'short', day: 'numeric', year: 'numeric' });
-    return '<div class="bg-white rounded-2xl p-5 border border-[#EC6426]/10 shadow-sm"><div class="flex items-start justify-between mb-2"><div><p class="font-semibold text-sc-brown">' + esc(r.customer_name) + '</p><p class="text-xs text-stone-400">' + date + '</p></div><p class="text-sc-orange text-lg">' + stars + '</p></div>' + (r.comment ? '<p class="text-sm text-stone-700">' + esc(r.comment) + '</p>' : '') + '</div>';
+async function loadReviews(){
+  const{data}=await db.from('reviews').select('*').eq('is_approved',true).order('created_at',{ascending:false}).limit(50);
+  const list=$('reviews-list');
+  if(!data||!data.length){list.innerHTML='<p class="text-center text-stone-400">Be the first to review Street Chefs!</p>';return;}
+  list.innerHTML=data.map(r=>{
+    const stars='★'.repeat(r.rating)+'☆'.repeat(5-r.rating);
+    const date=new Date(r.created_at).toLocaleDateString('en-UG',{month:'short',day:'numeric',year:'numeric'});
+    return '<div class="bg-white rounded-2xl p-5 border border-[#EC6426]/10 shadow-sm"><div class="flex items-start justify-between mb-2"><div><p class="font-semibold text-sc-brown">'+esc(r.customer_name)+'</p><p class="text-xs text-stone-400">'+date+'</p></div><p class="text-sc-orange text-lg">'+stars+'</p></div>'+(r.comment?'<p class="text-sm text-stone-700">'+esc(r.comment)+'</p>':'')+'</div>';
   }).join('');
 }
 
-function setAuthMode(mode) {
-  const s = mode === 'signup';
-  $('auth-title').textContent = s ? 'Create Account' : 'Login';
-  $('auth-submit').textContent = s ? 'Sign Up' : 'Login';
-  $('auth-name-wrap').classList.toggle('hidden', !s);
-  $('auth-phone-wrap').classList.toggle('hidden', !s);
-  $('auth-toggle').textContent = s ? 'Already have an account? Login' : 'Create account';
-  $('auth-modal').dataset.mode = mode;
-  $('auth-error').classList.add('hidden'); $('auth-info').classList.add('hidden');
+function setAuthMode(mode){
+  const s=mode==='signup';
+  $('auth-title').textContent=s?'Create Account':'Login';
+  $('auth-submit').textContent=s?'Sign Up':'Login';
+  $('auth-name-wrap').classList.toggle('hidden',!s);
+  $('auth-phone-wrap').classList.toggle('hidden',!s);
+  $('auth-toggle').textContent=s?'Already have an account? Login':'Create account';
+  $('auth-modal').dataset.mode=mode;
+  $('auth-error').classList.add('hidden');$('auth-info').classList.add('hidden');
 }
-function openAuth(mode) { setAuthMode(mode); openModal('auth-backdrop', 'auth-modal'); }
-function showAuthError(m) { $('auth-error').textContent = m; $('auth-error').classList.remove('hidden'); }
+function openAuth(mode){setAuthMode(mode);openModal('auth-backdrop','auth-modal');}
+function showAuthError(m){$('auth-error').textContent=m;$('auth-error').classList.remove('hidden');}
 
-// Claim referral after a successful SIGNUP (not login)
-async function tryClaimReferral() {
-  const storedRef = localStorage.getItem('sc_ref');
-  if (!storedRef || !user) return;
-  const r = await db.rpc('claim_referral', { p_new_user_id: user.id, p_referral_code: storedRef });
-  if (r.data && r.data.ok) {
-    localStorage.removeItem('sc_ref');
-    await refreshUser();
-    showToast('🎉 Welcome bonus added to your account!');
-  }
+async function tryClaimReferral(){
+  const storedRef=localStorage.getItem('sc_ref');
+  if(!storedRef||!user)return;
+  const r=await db.rpc('claim_referral',{p_new_user_id:user.id,p_referral_code:storedRef});
+  if(r.data&&r.data.ok){localStorage.removeItem('sc_ref');await refreshUser();showToast('🎉 Welcome bonus added to your account!');}
 }
 
-$('auth-form').addEventListener('submit', async e => {
+$('auth-form').addEventListener('submit',async e=>{
   e.preventDefault();
-  const mode = $('auth-modal').dataset.mode || 'login';
-  const email = $('a-email').value.trim(), password = $('a-password').value;
-  $('auth-error').classList.add('hidden'); $('auth-info').classList.add('hidden');
-  if (mode === 'signup') {
-    const name = $('a-name').value.trim(), phone = $('a-phone').value.trim();
-    const { data, error } = await db.auth.signUp({ email, password, options: { data: { full_name: name, phone_number: phone } } });
-    if (error) { showAuthError(error.message); return; }
-    if (data.session) { await refreshUser(); await tryClaimReferral(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome to Street Chefs!'); }
-    else {
-      const si = await db.auth.signInWithPassword({ email, password });
-      if (si.data && si.data.session) { await refreshUser(); await tryClaimReferral(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome to Street Chefs!'); }
-      else { $('auth-info').textContent = 'Account created! Check your email to confirm.'; $('auth-info').classList.remove('hidden'); setAuthMode('login'); }
+  const mode=$('auth-modal').dataset.mode||'login';
+  const email=$('a-email').value.trim(),password=$('a-password').value;
+  $('auth-error').classList.add('hidden');$('auth-info').classList.add('hidden');
+  if(mode==='signup'){
+    const name=$('a-name').value.trim(),phone=$('a-phone').value.trim();
+    const{data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name,phone_number:phone}}});
+    if(error){showAuthError(error.message);return;}
+    if(data.session){await refreshUser();await tryClaimReferral();closeModal('auth-backdrop','auth-modal');showToast('Welcome to Street Chefs!');}
+    else{
+      const si=await db.auth.signInWithPassword({email,password});
+      if(si.data&&si.data.session){await refreshUser();await tryClaimReferral();closeModal('auth-backdrop','auth-modal');showToast('Welcome to Street Chefs!');}
+      else{$('auth-info').textContent='Account created! Check your email to confirm.';$('auth-info').classList.remove('hidden');setAuthMode('login');}
     }
-  } else {
-    const { error } = await db.auth.signInWithPassword({ email, password });
-    if (error) { showAuthError(error.message); return; }
-    await refreshUser(); closeModal('auth-backdrop', 'auth-modal'); showToast('Welcome back!');
+  }else{
+    const{error}=await db.auth.signInWithPassword({email,password});
+    if(error){showAuthError(error.message);return;}
+    await refreshUser();closeModal('auth-backdrop','auth-modal');showToast('Welcome back!');
   }
 });
+async function doLogout(){await db.auth.signOut();user=null;profile=null;updateAccountUI();showToast('Logged out','info');}
 
-async function doLogout() {
-  await db.auth.signOut(); user = null; profile = null;
-  updateAccountUI(); showToast('Logged out', 'info');
-}
-
-async function refreshUser() {
-  const { data: { session } } = await db.auth.getSession();
-  user = session ? session.user : null;
-  if (user) {
-    let { data } = await db.from('customers').select('*').eq('id', user.id).maybeSingle();
-    if (!data) {
-      const name = user.user_metadata?.full_name || user.email;
-      const phone = user.user_metadata?.phone_number || '';
-      await db.from('customers').insert({ id: user.id, full_name: name, email: user.email, phone_number: phone });
-      ({ data } = await db.from('customers').select('*').eq('id', user.id).maybeSingle());
+async function refreshUser(){
+  const{data:{session}}=await db.auth.getSession();
+  user=session?session.user:null;
+  if(user){
+    let{data}=await db.from('customers').select('*').eq('id',user.id).maybeSingle();
+    if(!data){
+      const name=user.user_metadata?.full_name||user.email;
+      const phone=user.user_metadata?.phone_number||'';
+      await db.from('customers').insert({id:user.id,full_name:name,email:user.email,phone_number:phone});
+      ({data}=await db.from('customers').select('*').eq('id',user.id).maybeSingle());
     }
-    profile = data || { full_name: user.user_metadata?.full_name || user.email, points: 0 };
-  } else { profile = null; }
+    profile=data||{full_name:user.user_metadata?.full_name||user.email,points:0};
+  }else profile=null;
   updateAccountUI();
 }
-
-function updateAccountUI() {
-  const logged = !!user;
-  $('acct-logged-out').classList.toggle('hidden', logged);
-  $('acct-logged-in').classList.toggle('hidden', !logged); $('acct-logged-in').classList.toggle('flex', logged);
-  $('m-logged-out').classList.toggle('hidden', logged);
-  $('m-logged-in').classList.toggle('hidden', !logged); $('m-logged-in').classList.toggle('flex', logged);
-  const name = profile ? (profile.full_name || '—') : '—';
-  const pts = profile ? (profile.points || 0) : 0;
-  const init = ((profile && profile.full_name) || 'S').trim().charAt(0).toUpperCase();
-  $('avatar').textContent = init; $('m-avatar').textContent = init;
-  $('acct-name').textContent = name; $('m-acct-name').textContent = name;
-  $('acct-points').textContent = pts + ' pts'; $('m-acct-points').textContent = pts + ' pts';
+function updateAccountUI(){
+  const logged=!!user;
+  $('acct-logged-out').classList.toggle('hidden',logged);
+  $('acct-logged-in').classList.toggle('hidden',!logged);$('acct-logged-in').classList.toggle('flex',logged);
+  $('m-logged-out').classList.toggle('hidden',logged);
+  $('m-logged-in').classList.toggle('hidden',!logged);$('m-logged-in').classList.toggle('flex',logged);
+  const name=profile?(profile.full_name||'—'):'—';
+  const pts=profile?(profile.points||0):0;
+  const init=((profile&&profile.full_name)||'S').trim().charAt(0).toUpperCase();
+  $('avatar').textContent=init;$('m-avatar').textContent=init;
+  $('acct-name').textContent=name;$('m-acct-name').textContent=name;
+  $('acct-points').textContent=pts+' pts';$('m-acct-points').textContent=pts+' pts';
 }
 
-$('auth-forgot').addEventListener('click', async () => {
-  const email = $('a-email').value.trim();
-  if (!email) { showAuthError('Type your email first.'); return; }
-  const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
-  if (error) showAuthError(error.message);
-  else { $('auth-info').textContent = 'Reset link sent. Check your email.'; $('auth-info').classList.remove('hidden'); }
+$('auth-forgot').addEventListener('click',async()=>{
+  const email=$('a-email').value.trim();
+  if(!email){showAuthError('Type your email first.');return;}
+  const{error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+  if(error)showAuthError(error.message);
+  else{$('auth-info').textContent='Reset link sent. Check your email.';$('auth-info').classList.remove('hidden');}
 });
-
-$('reset-form').addEventListener('submit', async e => {
+$('reset-form').addEventListener('submit',async e=>{
   e.preventDefault();
-  const p = $('r-password').value, c = $('r-confirm').value;
+  const p=$('r-password').value,c=$('r-confirm').value;
   $('reset-error').classList.add('hidden');
-  if (p !== c) { $('reset-error').textContent = 'Passwords do not match.'; $('reset-error').classList.remove('hidden'); return; }
-  const { error } = await db.auth.updateUser({ password: p });
-  if (error) { $('reset-error').textContent = error.message; $('reset-error').classList.remove('hidden'); return; }
-  closeModal('reset-backdrop', 'reset-modal'); openAuth('login');
+  if(p!==c){$('reset-error').textContent='Passwords do not match.';$('reset-error').classList.remove('hidden');return;}
+  const{error}=await db.auth.updateUser({password:p});
+  if(error){$('reset-error').textContent=error.message;$('reset-error').classList.remove('hidden');return;}
+  closeModal('reset-backdrop','reset-modal');openAuth('login');
+});
+function maybeOpenReset(){if(location.hash.includes('recovery')||location.hash==='#reset')openModal('reset-backdrop','reset-modal');}
+db.auth.onAuthStateChange(event=>{
+  if(event==='SIGNED_OUT'){user=null;profile=null;updateAccountUI();}
+  if(event==='SIGNED_IN')refreshUser();
+  if(event==='PASSWORD_RECOVERY'){refreshUser();openModal('reset-backdrop','reset-modal');}
 });
 
-function maybeOpenReset() { if (location.hash.includes('recovery') || location.hash === '#reset') openModal('reset-backdrop', 'reset-modal'); }
-db.auth.onAuthStateChange((event) => {
-  if (event === 'SIGNED_OUT') { user = null; profile = null; updateAccountUI(); }
-  if (event === 'SIGNED_IN') refreshUser();
-  if (event === 'PASSWORD_RECOVERY') { refreshUser(); openModal('reset-backdrop', 'reset-modal'); }
-});
-
-const STATUS_INDEX = { pending: 0, confirmed: 1, preparing: 2, ready: 3, out_for_delivery: 3, completed: 4 };
-let trackTimer = null;
-
-function showTrack(o) {
-  $('track-result').classList.remove('hidden'); $('track-error').classList.add('hidden');
-  $('track-status').textContent = ({ pending: 'Received', confirmed: 'Confirmed', preparing: 'Preparing', ready: 'On the way', out_for_delivery: 'On the way', completed: 'Delivered' })[o.status] || o.status;
-  $('track-code-label').textContent = '#' + o.order_code;
-  const idx = STATUS_INDEX[o.status] ?? 0;
-  $('track-bar').style.width = (idx / 4 * 100) + '%';
-  document.querySelectorAll('.track-dot').forEach((d, i) => d.classList.toggle('on', i <= idx));
-  $('track-items').innerHTML = (o.items || []).map(i => '<div class="flex justify-between text-sm bg-sc-cream p-2 rounded-lg"><span>' + i.quantity + '× ' + esc(i.name) + '</span><span class="font-semibold text-sc-brown">UGX ' + Number(i.price * i.quantity).toLocaleString() + '</span></div>').join('');
+const STATUS_INDEX={pending:0,confirmed:1,preparing:2,ready:3,out_for_delivery:3,completed:4};
+let trackTimer=null;
+function showTrack(o){
+  $('track-result').classList.remove('hidden');$('track-error').classList.add('hidden');
+  $('track-status').textContent=({pending:'Received',confirmed:'Confirmed',preparing:'Preparing',ready:'On the way',out_for_delivery:'On the way',completed:'Delivered'})[o.status]||o.status;
+  $('track-code-label').textContent='#'+o.order_code;
+  const idx=STATUS_INDEX[o.status]??0;
+  $('track-bar').style.width=(idx/4*100)+'%';
+  document.querySelectorAll('.track-dot').forEach((d,i)=>d.classList.toggle('on',i<=idx));
+  $('track-items').innerHTML=(o.items||[]).map(i=>'<div class="flex justify-between text-sm bg-sc-cream p-2 rounded-lg"><span>'+i.quantity+'× '+esc(i.name)+'</span><span class="font-semibold text-sc-brown">UGX '+Number(i.price*i.quantity).toLocaleString()+'</span></div>').join('');
 }
-
-function stopTracking() { if (trackTimer) { clearInterval(trackTimer); trackTimer = null; } }
-
-async function trackByCode(code) {
+function stopTracking(){if(trackTimer){clearInterval(trackTimer);trackTimer=null;}}
+async function trackByCode(code){
   stopTracking();
-  code = (code || '').trim().toUpperCase();
-  if (code.length < 5) { $('track-error').textContent = 'Enter your full order code.'; $('track-error').classList.remove('hidden'); return; }
-  $('track-go').textContent = '…';
-  try {
-    const { data, error } = await db.rpc('lookup_order', { p_code: code });
-    if (error) throw error;
-    if (!data || !data.length) {
-      $('track-error').textContent = 'No order found with that code.';
-      $('track-error').classList.remove('hidden'); $('track-result').classList.add('hidden');
-    } else {
-      showTrack(data[0]);
-      trackTimer = setInterval(async () => {
-        const r = await db.rpc('lookup_order', { p_code: code });
-        if (r.data && r.data.length) showTrack(r.data[0]);
-      }, 5000);
+  code=(code||'').trim().toUpperCase();
+  if(code.length<5){$('track-error').textContent='Enter your full order code.';$('track-error').classList.remove('hidden');return;}
+  $('track-go').textContent='…';
+  try{
+    const{data,error}=await db.rpc('lookup_order',{p_code:code});
+    if(error)throw error;
+    if(!data||!data.order_code){$('track-error').textContent='No order found with that code.';$('track-error').classList.remove('hidden');$('track-result').classList.add('hidden');}
+    else{
+      showTrack(data);
+      trackTimer=setInterval(async()=>{const r=await db.rpc('lookup_order',{p_code:code});if(r.data&&r.data.order_code)showTrack(r.data);},5000);
     }
-  } catch (err) {
-    $('track-error').textContent = 'Could not look up that order.';
-    $('track-error').classList.remove('hidden');
-  } finally { $('track-go').textContent = 'Track'; }
+  }catch(err){$('track-error').textContent='Could not look up that order.';$('track-error').classList.remove('hidden');}
+  finally{$('track-go').textContent='Track';}
 }
 
-function closeNav() { $('nav-drawer').classList.add('-translate-x-full'); $('nav-backdrop').classList.add('opacity-0', 'pointer-events-none'); }
-
-function showPage(p) {
-  p = (p === 'reviews') ? 'reviews' : 'home';
-  $('page-home').classList.toggle('hidden', p !== 'home');
-  $('page-reviews').classList.toggle('hidden', p !== 'reviews');
-  document.querySelectorAll('.page-btn').forEach(b => b.classList.toggle('active', b.dataset.page === p));
-  window.scrollTo({ top: 0 });
-  if (p === 'reviews') loadReviews();
-  history.replaceState(null, '', '#' + p);
+function closeNav(){$('nav-drawer').classList.add('-translate-x-full');$('nav-backdrop').classList.add('opacity-0','pointer-events-none');}
+function showPage(p){
+  p=(p==='reviews')?'reviews':'home';
+  $('page-home').classList.toggle('hidden',p!=='home');
+  $('page-reviews').classList.toggle('hidden',p!=='reviews');
+  document.querySelectorAll('.page-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===p));
+  window.scrollTo({top:0});
+  if(p==='reviews')loadReviews();
+  history.replaceState(null,'','#'+p);
+}
+function filter(q){
+  q=q.trim().toLowerCase();let any=false;
+  document.querySelectorAll('.menu-item').forEach(r=>{const m=r.dataset.name.includes(q);r.style.display=m?'':'none';if(m)any=true;});
+  document.querySelectorAll('.menu-section').forEach(s=>{const v=s.querySelectorAll('.menu-item:not([style*="none"])').length;s.style.display=v?'':'none';});
+  $('no-results').classList.toggle('hidden',any);
 }
 
-function filter(q) {
-  q = q.trim().toLowerCase(); let any = false;
-  document.querySelectorAll('.menu-item').forEach(r => { const m = r.dataset.name.includes(q); r.style.display = m ? '' : 'none'; if (m) any = true; });
-  document.querySelectorAll('.menu-section').forEach(s => { const v = s.querySelectorAll('.menu-item:not([style*="none"])').length; s.style.display = v ? '' : 'none'; });
-  $('no-results').classList.toggle('hidden', any);
-}
+$('nav-open').addEventListener('click',()=>{$('nav-drawer').classList.remove('-translate-x-full');$('nav-backdrop').classList.remove('opacity-0','pointer-events-none');});
+$('nav-close').addEventListener('click',closeNav);
+$('nav-backdrop').addEventListener('click',closeNav);
+$('nav-drawer').addEventListener('click',e=>{if(e.target.closest('[data-page]'))closeNav();});
+$('nav-track').addEventListener('click',()=>{closeNav();openModal('track-backdrop','track-modal');});
+$('top-track').addEventListener('click',()=>openModal('track-backdrop','track-modal'));
+$('login-open').addEventListener('click',()=>openAuth('login'));
+$('signup-open').addEventListener('click',()=>openAuth('signup'));
+$('m-login-open').addEventListener('click',()=>{closeNav();openAuth('login');});
+$('m-signup-open').addEventListener('click',()=>{closeNav();openAuth('signup');});
+$('auth-toggle').addEventListener('click',()=>setAuthMode($('auth-modal').dataset.mode==='signup'?'login':'signup'));
+$('auth-close').addEventListener('click',()=>closeModal('auth-backdrop','auth-modal'));
+$('auth-backdrop').addEventListener('click',()=>closeModal('auth-backdrop','auth-modal'));
+$('logout').addEventListener('click',doLogout);
+$('m-logout').addEventListener('click',()=>{closeNav();doLogout();});
+$('acct-points-chip').addEventListener('click',openRewards);
+$('m-acct-points-chip').addEventListener('click',()=>{closeNav();openRewards();});
+$('rew-close').addEventListener('click',()=>closeModal('rew-backdrop','rew-modal'));
+$('rew-backdrop').addEventListener('click',()=>closeModal('rew-backdrop','rew-modal'));
 
-$('nav-open').addEventListener('click', () => { $('nav-drawer').classList.remove('-translate-x-full'); $('nav-backdrop').classList.remove('opacity-0', 'pointer-events-none'); });
-$('nav-close').addEventListener('click', closeNav);
-$('nav-backdrop').addEventListener('click', closeNav);
-$('nav-drawer').addEventListener('click', e => { if (e.target.closest('[data-page]')) closeNav(); });
-$('nav-track').addEventListener('click', () => { closeNav(); openModal('track-backdrop', 'track-modal'); });
-$('top-track').addEventListener('click', () => openModal('track-backdrop', 'track-modal'));
-$('login-open').addEventListener('click', () => openAuth('login'));
-$('signup-open').addEventListener('click', () => openAuth('signup'));
-$('m-login-open').addEventListener('click', () => { closeNav(); openAuth('login'); });
-$('m-signup-open').addEventListener('click', () => { closeNav(); openAuth('signup'); });
-$('auth-toggle').addEventListener('click', () => setAuthMode($('auth-modal').dataset.mode === 'signup' ? 'login' : 'signup'));
-$('auth-close').addEventListener('click', () => closeModal('auth-backdrop', 'auth-modal'));
-$('auth-backdrop').addEventListener('click', () => closeModal('auth-backdrop', 'auth-modal'));
-$('logout').addEventListener('click', doLogout);
-$('m-logout').addEventListener('click', () => { closeNav(); doLogout(); });
-$('acct-points-chip').addEventListener('click', openRewards);
-$('m-acct-points-chip').addEventListener('click', () => { closeNav(); openRewards(); });
-$('rew-close').addEventListener('click', () => closeModal('rew-backdrop', 'rew-modal'));
-$('rew-backdrop').addEventListener('click', () => closeModal('rew-backdrop', 'rew-modal'));
-
-$('menu').addEventListener('click', e => {
-  const info = e.target.closest('[data-info]');
-  if (info) { toggleInfo(info.dataset.info); return; }
-  const a = e.target.closest('[data-add]'), i = e.target.closest('[data-inc]'), d = e.target.closest('[data-dec]');
-  if (a) setQty(a.dataset.add, 1); else if (i) setQty(i.dataset.inc, 1); else if (d) setQty(d.dataset.dec, -1);
+$('menu').addEventListener('click',e=>{
+  const info=e.target.closest('[data-info]');
+  if(info){toggleInfo(info.dataset.info);return;}
+  const a=e.target.closest('[data-add]'),i=e.target.closest('[data-inc]'),d=e.target.closest('[data-dec]');
+  if(a)setQty(a.dataset.add,1);else if(i)setQty(i.dataset.inc,1);else if(d)setQty(d.dataset.dec,-1);
 });
-$('cart-list').addEventListener('click', e => {
-  const i = e.target.closest('[data-inc]'), d = e.target.closest('[data-dec]');
-  if (i) setQty(i.dataset.inc, 1); else if (d) setQty(d.dataset.dec, -1);
+$('cart-list').addEventListener('click',e=>{
+  const i=e.target.closest('[data-inc]'),d=e.target.closest('[data-dec]');
+  if(i)setQty(i.dataset.inc,1);else if(d)setQty(d.dataset.dec,-1);
 });
-
-$('top-cart').addEventListener('click', openCart);
-$('bar-cart').addEventListener('click', openCart);
-$('cart-close').addEventListener('click', closeCart);
-cartBg.addEventListener('click', closeCart);
-$('cart-clear').addEventListener('click', clearCart);
-$('bar-clear').addEventListener('click', clearCart);
-$('cart-checkout').addEventListener('click', () => { closeCart(); openDelivery(); });
-$('bar-checkout').addEventListener('click', () => { closeCart(); openDelivery(); });
-$('delivery-close').addEventListener('click', () => closeModal('delivery-backdrop', 'delivery-modal'));
-$('delivery-backdrop').addEventListener('click', () => closeModal('delivery-backdrop', 'delivery-modal'));
-$('delivery-form').addEventListener('submit', placeOrder);
-$('success-done').addEventListener('click', () => closeModal('success-backdrop', 'success-modal'));
-$('copy-code').addEventListener('click', async () => {
-  try { await navigator.clipboard.writeText($('success-code').textContent); showToast('Code copied'); } catch (e) {}
+$('top-cart').addEventListener('click',openCart);
+$('bar-cart').addEventListener('click',openCart);
+$('cart-close').addEventListener('click',closeCart);
+cartBg.addEventListener('click',closeCart);
+$('cart-clear').addEventListener('click',clearCart);
+$('bar-clear').addEventListener('click',clearCart);
+$('cart-checkout').addEventListener('click',()=>{closeCart();openDelivery();});
+$('bar-checkout').addEventListener('click',()=>{closeCart();openDelivery();});
+$('delivery-close').addEventListener('click',()=>closeModal('delivery-backdrop','delivery-modal'));
+$('delivery-backdrop').addEventListener('click',()=>closeModal('delivery-backdrop','delivery-modal'));
+$('delivery-form').addEventListener('submit',placeOrder);
+$('success-done').addEventListener('click',()=>closeModal('success-backdrop','success-modal'));
+$('copy-code').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('success-code').textContent);showToast('Code copied');}catch(e){}});
+$('track-go').addEventListener('click',()=>trackByCode($('track-code').value));
+$('track-code').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();trackByCode($('track-code').value);}});
+$('track-close').addEventListener('click',()=>{stopTracking();closeModal('track-backdrop','track-modal');});
+$('track-backdrop').addEventListener('click',()=>{stopTracking();closeModal('track-backdrop','track-modal');});
+$('index').addEventListener('click',e=>{
+  const b=e.target.closest('[data-goto]');if(!b)return;
+  const s=document.querySelectorAll('.menu-section')[+b.dataset.goto];
+  s&&s.scrollIntoView({behavior:'smooth',block:'start'});
 });
-$('redeem-login').addEventListener('click', () => { closeModal('delivery-backdrop', 'delivery-modal'); openAuth('login'); });
-$('redeem-toggle').addEventListener('change', e => { redeemOn = e.target.checked; });
-$('track-go').addEventListener('click', () => trackByCode($('track-code').value));
-$('track-code').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); trackByCode($('track-code').value); } });
-$('track-close').addEventListener('click', () => { stopTracking(); closeModal('track-backdrop', 'track-modal'); });
-$('track-backdrop').addEventListener('click', () => { stopTracking(); closeModal('track-backdrop', 'track-modal'); });
-$('index').addEventListener('click', e => {
-  const b = e.target.closest('[data-goto]'); if (!b) return;
-  const s = document.querySelectorAll('.menu-section')[+b.dataset.goto];
-  s && s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+['q','q-m'].forEach(id=>{
+  const el=$(id);
+  el&&el.addEventListener('input',e=>{filter(e.target.value);const o=$(id==='q'?'q-m':'q');if(o)o.value=e.target.value;});
 });
-['q', 'q-m'].forEach(id => {
-  const el = $(id);
-  el && el.addEventListener('input', e => { filter(e.target.value); const o = $(id === 'q' ? 'q-m' : 'q'); if (o) o.value = e.target.value; });
-});
-document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); showPage(b.dataset.page); }));
-window.addEventListener('hashchange', () => {
-  if (location.hash.includes('recovery') || location.hash === '#reset') maybeOpenReset();
-  else showPage(location.hash === '#reviews' ? 'reviews' : 'home');
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();showPage(b.dataset.page);}));
+window.addEventListener('hashchange',()=>{
+  if(location.hash.includes('recovery')||location.hash==='#reset')maybeOpenReset();
+  else showPage(location.hash==='#reviews'?'reviews':'home');
 });
 
-(async () => {
+(async()=>{
   await refreshUser();
   await loadContent();
-  showPage(location.hash === '#reviews' ? 'reviews' : 'home');
+  showPage(location.hash==='#reviews'?'reviews':'home');
   loadMenu();
   maybeOpenReset();
   lucide.createIcons();
