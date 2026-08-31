@@ -88,9 +88,13 @@ tailwind.config={theme:{extend:{colors:{sc:{orange:'#EC6426',yellow:'#F8A91F',cr
 
   #nav-drawer {
     position:fixed; left:0; top:0; bottom:0; width:min(82vw,22rem);
-    background:#FDE3CF; padding:1.25rem; transform:translateX(-105%); transition:transform .3s ease; z-index:50;
+    background:#FDE3CF; padding:1.25rem; transform:translateX(-105%); transition:transform .3s ease; z-index:50; pointer-events:none;
   }
-  #nav-backdrop { transition:opacity .2s ease; }
+  #nav-drawer.open { transform:translateX(0); pointer-events:auto; }
+  #nav-backdrop {
+    opacity:0; pointer-events:none; transition:opacity .2s ease; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  }
+  #nav-backdrop.open { opacity:1; pointer-events:auto; }
   #order-bar {
     position:fixed; left:50%; bottom:.75rem; transform:translateX(-50%);
     width:min(94vw,30rem); z-index:40;
@@ -190,8 +194,8 @@ tailwind.config={theme:{extend:{colors:{sc:{orange:'#EC6426',yellow:'#F8A91F',cr
   </div>
 </header>
 
-<div id="nav-backdrop" class="fixed inset-0 z-[45] bg-sc-brown/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity md:hidden"></div>
-<aside id="nav-drawer" class="fixed z-[50] top-0 left-0 h-full w-[80%] max-w-xs bg-[#FDE3CF] shadow-2xl p-5 flex flex-col gap-1 -translate-x-full transition-transform duration-300 md:hidden">
+<div id="nav-backdrop" class="fixed inset-0 z-[45] bg-sc-brown/40 opacity-0 pointer-events-none transition-opacity backdrop-blur-sm md:hidden"></div>
+<aside id="nav-drawer" class="fixed z-[50] top-0 left-0 h-full w-[80%] max-w-xs bg-[#FDE3CF] shadow-2xl p-5 flex flex-col gap-1 transition-transform duration-300 md:hidden">
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-xl bg-sc-brown text-sc-yellow flex items-center justify-center"><i data-lucide="flame" class="w-5 h-5"></i></span><p class="word text-sc-brown">Street Chefs</p></div>
     <button id="nav-close" class="text-sc-brown p-2 rounded-xl hover:bg-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -840,7 +844,10 @@ async function trackByCode(code){
   finally{$('track-go').textContent='Track';}
 }
 
-function closeNav(){$('nav-drawer').classList.add('-translate-x-full');$('nav-backdrop').classList.add('opacity-0','pointer-events-none');}
+function closeNav(){
+  $('nav-drawer').classList.remove('open');
+  $('nav-backdrop').classList.remove('open');
+}
 function showPage(p){
   p=(p==='reviews')?'reviews':'home';
   $('page-home').classList.toggle('hidden',p!=='home');
@@ -857,7 +864,10 @@ function filter(q){
   $('no-results').classList.toggle('hidden',any);
 }
 
-$('nav-open').addEventListener('click',()=>{$('nav-drawer').classList.remove('-translate-x-full');$('nav-backdrop').classList.remove('opacity-0','pointer-events-none');});
+$('nav-open').addEventListener('click',()=>{
+  $('nav-drawer').classList.add('open');
+  $('nav-backdrop').classList.add('open');
+});
 $('nav-close').addEventListener('click',closeNav);
 $('nav-backdrop').addEventListener('click',closeNav);
 $('nav-drawer').addEventListener('click',e=>{if(e.target.closest('[data-page]'))closeNav();});
