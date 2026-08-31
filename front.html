@@ -45,14 +45,166 @@ tailwind.config={theme:{extend:{colors:{sc:{orange:'#EC6426',yellow:'#F8A91F',cr
   .toast{animation:toastIn .35s cubic-bezier(.16,1,.3,1) both;}
   @keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.95);}to{opacity:1;transform:none;}}
 
+  header > div,
+  #nav-drawer,
+  #page-home,
+  #page-reviews,
+  footer > div,
+  #order-bar > div,
+  #cart-drawer,
+  #delivery-modal,
+  #auth-modal,
+  #reset-modal,
+  #rew-modal,
+  #success-modal,
+  #track-modal {
+    box-sizing:border-box;
+  }
+
+  header > div {
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+    max-width:1200px;
+    margin:0 auto;
+    padding:.75rem 1rem;
+    width:100%;
+  }
+  #page-home,
+  #page-reviews,
+  footer > div,
+  main#page-home,
+  main#page-reviews {
+    max-width:1200px;
+    margin:0 auto;
+    width:100%;
+    padding-left:1rem;
+    padding-right:1rem;
+  }
+  #page-home {
+    display:block;
+  }
+  nav#index {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:.5rem;
+    margin-bottom:1.5rem;
+  }
+  #menu .grid,
+  #menu > .grid {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1rem;
+    width:100%;
+    max-width:100%;
+  }
+  #menu .grid > div,
+  .menu-card,
+  .menu-item {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+  }
+  .menu-card {
+    overflow:hidden;
+  }
+  #nav-drawer {
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:min(82vw, 22rem);
+    transform:translateX(-105%);
+    transition:transform .3s ease;
+    background:#FDE3CF;
+    z-index:50;
+    padding:1.25rem;
+  }
+  #nav-drawer.open,
+  #nav-backdrop.open {
+    transform:translateX(0);
+  }
+  #order-bar {
+    position:fixed;
+    left:50%;
+    bottom:.75rem;
+    transform:translateX(-50%);
+    width:min(94vw, 30rem);
+    z-index:40;
+  }
+  #order-bar > div {
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    background:#632713;
+    color:#fff;
+    border-radius:1rem;
+    padding:.65rem 1rem;
+  }
+  #cart-backdrop,
+  #delivery-backdrop,
+  #auth-backdrop,
+  #success-backdrop,
+  #track-backdrop,
+  #rew-backdrop,
+  #reset-backdrop {
+    position:fixed;
+    inset:0;
+    background:rgba(64,26,12,.36);
+    backdrop-filter:blur(3px);
+  }
+  #cart-drawer,
+  #delivery-modal,
+  #auth-modal,
+  #reset-modal,
+  #rew-modal,
+  #success-modal,
+  #track-modal {
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    width:min(94vw, 30rem);
+    max-height:88vh;
+    background:#fff;
+    border-radius:1.5rem;
+    box-shadow:0 22px 60px rgba(0,0,0,.2);
+    overflow:auto;
+  }
+
+  @media (min-width: 640px){
+    #menu .grid,
+    #menu > .grid {
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px){
+    #menu .grid,
+    #menu > .grid {
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+    }
+  }
+
   @media (max-width: 640px){
-    #order-bar{width:calc(100% - 1rem);bottom:.75rem;}
-    #order-bar .bg-sc-brown{padding-left:1rem;padding-right:0.75rem;}
-    #bar-summary{font-size:12px; white-space:nowrap;}
-    #bar-checkout{padding-inline:.7rem;}
+    body{overflow-x:hidden;}
+    header > div {flex-wrap:wrap;}
+    #announcement, #m-announcement {display:none !important;}
+    #top-track, #top-cart, .hidden.sm\:flex, .md\:block, .md\:flex, .sm\:hidden, .md\:hidden {display:none !important;}
+    #nav-open, #nav-close {display:inline-flex !important;}
+    #page-home, #page-reviews, footer{padding-left:.75rem !important; padding-right:.75rem !important;}
+    #page-home h1.word {font-size:2.5rem;line-height:1.1;}
+    #page-home section:first-of-type {padding-top:2.25rem;}
+    #index{justify-content:flex-start;overflow-x:auto;white-space:nowrap;padding-bottom:.25rem;}
+    .chip{flex-shrink:0;}
+    #order-bar{width:calc(100vw - 1rem) !important;}
+    #order-bar > div{padding:.6rem .8rem;}
+    #bar-summary{font-size:11px;white-space:nowrap;}
+    #bar-checkout{padding:.6rem .7rem;}
     .whatsapp-loc-btn{padding:12px 16px;font-size:14px;}
     .menu-item .info-label{white-space:nowrap;}
-    .chip{padding-left:.9rem;padding-right:.9rem;}
+    .modal-card{width:min(94vw, 26rem) !important;}
   }
 
   @media (min-width: 641px) and (max-width: 1023px){
